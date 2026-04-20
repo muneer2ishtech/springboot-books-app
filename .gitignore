@@ -5,12 +5,11 @@ HELP.md
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
-pom.xml.versionsBackup
 
 ### Gradle ###
 .gradle
-!gradle/wrapper/gradle-wrapper.jar
 build/
+!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -22,7 +21,6 @@ build/
 .settings
 .springBeans
 .sts4-cache
-
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
