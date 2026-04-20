@@ -14,7 +14,7 @@ val ishtechSpringbootJwtauthVersion = "2.1.0-SNAPSHOT"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
 val springdocVersion = "2.8.17"
-val hibernateVersion = "6.6.45.Final"
+val hibernateVersion = "7.2.7.Final"
 
 java {
 	toolchain {
