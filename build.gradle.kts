@@ -13,7 +13,7 @@ val ishtechBaseJpaVersion = "4.1.0-SNAPSHOT"
 val ishtechSpringbootJwtauthVersion = "2.1.0-SNAPSHOT"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
-val springdocVersion = "2.8.17"
+val springdocVersion = "3.0.3"
 val hibernateVersion = "7.2.7.Final"
 
 java {
