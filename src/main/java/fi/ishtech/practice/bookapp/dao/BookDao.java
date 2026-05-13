@@ -35,7 +35,7 @@ public class BookDao {
 
 	/**
 	 * Save book without prepared statement (using string concatenation - NOT RECOMMENDED for production)
-	 * 
+	 *
 	 * @param bookDto {@link BookDto}
 	 */
 	public void saveWithoutPreparedStatementWithEscapes(BookDto book) {
@@ -49,7 +49,7 @@ public class BookDao {
 
 	/**
 	 * Save book without prepared statement (using string concatenation - NOT RECOMMENDED for production)
-	 * 
+	 *
 	 * @param bookDto {@link BookDto}
 	 */
 	public void saveWithoutPreparedStatementWithoutEscapes(BookDto book) {

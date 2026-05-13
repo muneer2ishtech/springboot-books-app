@@ -3,13 +3,14 @@ package fi.ishtech.practice.bookapp.spec;
 import java.io.Serial;
 import java.util.List;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 import fi.ishtech.base.spec.BaseStandardSpec;
 import fi.ishtech.practice.bookapp.dto.BookFilterParams;
 import fi.ishtech.practice.bookapp.entity.Book;
 import fi.ishtech.practice.bookapp.entity.Book_;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 /**
  * Specification for Book
@@ -21,6 +22,11 @@ public class BookSpec extends BaseStandardSpec<Book, BookFilterParams> {
 	@Serial
 	private static final long serialVersionUID = 7727812343620150277L;
 
+	/**
+	 * Constructor with filter params
+	 *
+	 * @param params {@link BookFilterParams}
+	 */
 	public BookSpec(BookFilterParams params) {
 		super(params);
 	}

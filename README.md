@@ -1,9 +1,9 @@
-# spring-boot-book-app
+# springboot-book-app
 Books managing application using Spring Boot
 
 ## Tech stack
 - Java: 25
-- Spring Boot: 3.5.9
+- Spring Boot: 4.0.6
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
@@ -15,16 +15,26 @@ Books managing application using Spring Boot
 
 ## Design
 - [ishtech-jpa-base](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
-- [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentiation & Authorization
+- [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentication & Authorization
 
 ## APIs
 
 - For details you can see swagger documentation
     - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
     - [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+
 - Note: Check and update URI and PORT on which application is running
 
-- For Authentiation & Authorization APIs:
+
+- For quick API information:
+    - See [API-INFO.md](./API-INFO.md)
+
+- For `curl` request/response samples:
+    - See [CURL-INFO.md](./CURL-INFO.md)
+
+
+- For Authentication & Authorization APIs:
     - See [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth)
 
 
@@ -37,7 +47,7 @@ Books managing application using Spring Boot
     - For PostgreSQL
         - See [https://github.com/IshTech/docker-db/tree/main/postgres](https://github.com/IshTech/docker-db/tree/main/postgres)
 
-- Login to DB as `root` / `superuser` and run [init_db.sql](src/test/resources/db/init_db.sql) to setup DB Schema, DB User and Grant privileges
+- Login to DB as `root` / `superuser` and run [init_db.sql](src/test/resources/db/postgres/init_db.sql) to setup DB Schema, DB User and Grant privileges
 
 #### DB Access
 
@@ -48,12 +58,12 @@ psql -U ishtech_dev_user -W -d ishtech_dev_db
 - Enter password on prompt `ishtech_dev_pass`
 
 ### Flyway migration files
-- Path `src/main/resources/db/migration/`
+- Path `src/main/resources/db/migration/postgres`
 - To create migration files with date and time in the file name
-    - E.g. `V20251021_103045__create_table_book.sql`
+    - E.g. `V20251022_020018__create_table_book.sql`
 
 ```
-touch src/main/resources/db/migration/V$(date +"%Y%m%d_%H%M%S")__create_table_TODO_PUT_TABLE_NAME_WITHOUT_PREFIX.sql
+touch src/main/resources/db/migration/postgres/V$(date +"%Y%m%d_%H%M%S")__create_table_TODO_PUT_TABLE_NAME_WITHOUT_PREFIX.sql
 
 ```
 

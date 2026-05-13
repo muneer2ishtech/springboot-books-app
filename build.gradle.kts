@@ -1,20 +1,20 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.5.9"
+	id("org.springframework.boot") version "4.0.6"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "fi.ishtech.practice"
-version = "0.3.0"
+version = "0.4.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 // Centralized version declarations
-val ishtechBaseJpaVersion = "3.1.0"
-val ishtechSpringbootJwtauthVersion = "1.0.0"
+val ishtechBaseJpaVersion = "5.0.0"
+val ishtechSpringbootJwtauthVersion = "3.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
-val springdocVersion = "2.8.15"
-val hibernateVersion = "6.6.39.Final"
+val springdocVersion = "3.0.3"
+val hibernateVersion = "7.2.12.Final"
 
 java {
 	toolchain {
@@ -74,6 +74,7 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}")
 
+	testRuntimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
