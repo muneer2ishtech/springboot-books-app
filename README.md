@@ -3,7 +3,7 @@ Books managing application using Spring Boot
 
 ## Tech stack
 - Java: 25
-- Spring Boot: 3.5.13
+- Spring Boot: 4.0.6
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
