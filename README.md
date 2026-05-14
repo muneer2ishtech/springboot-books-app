@@ -3,7 +3,7 @@ Books managing application using Spring Boot
 
 ## Tech stack
 - Java: 25
-- Spring Boot: 4.0.6
+- Spring Boot: 4.0.x
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
@@ -23,19 +23,13 @@ Books managing application using Spring Boot
     - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
     - [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
-
 - Note: Check and update URI and PORT on which application is running
 
-
-- For quick API information:
+- For API names and descriptions:
     - See [API-INFO.md](./API-INFO.md)
 
-- For `curl` request/response samples:
+- For `curl` & `json` request/response samples:
     - See [CURL-INFO.md](./CURL-INFO.md)
-
-
-- For Authentication & Authorization APIs:
-    - See [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth)
 
 
 ## DB
