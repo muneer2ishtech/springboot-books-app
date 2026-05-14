@@ -73,6 +73,7 @@ public class BookServiceImpl implements BookService {
 		Book book = bookMapper.toNewEntity(bookDto);
 
 		book = bookRepository.save(book);
+		log.info("Created Book({})", book.getId());
 
 		return bookMapper.toBriefDto(book);
 	}
@@ -86,6 +87,7 @@ public class BookServiceImpl implements BookService {
 		bookMapper.toEntity(bookDto, book);
 
 		book = bookRepository.save(book);
+		log.info("Updated Book({})", book.getId());
 
 		return bookMapper.toBriefDto(book);
 	}
@@ -93,5 +95,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void deleteById(Long id) {
 		bookRepository.deleteById(id);
+		log.info("Deleted Book({})", id);
 	}
+
 }
