@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.controller;
+package fi.ishtech.practice.springboot.booksapp.controller;
 
 import java.util.NoSuchElementException;
 

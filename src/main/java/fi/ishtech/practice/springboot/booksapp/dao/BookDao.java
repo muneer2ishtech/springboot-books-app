@@ -1,9 +1,9 @@
-package fi.ishtech.practice.bookapp.dao;
+package fi.ishtech.practice.springboot.booksapp.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import fi.ishtech.practice.bookapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

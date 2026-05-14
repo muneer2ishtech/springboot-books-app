@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp;
+package fi.ishtech.practice.springboot.booksapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,15 +8,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // @formatter:off
 @SpringBootApplication(scanBasePackages = {
 		"fi.ishtech.springboot.jwtauth",
-		"fi.ishtech.practice.bookapp"
+		"fi.ishtech.practice.springboot.booksapp"
 })
 @EntityScan(basePackages = {
 		"fi.ishtech.springboot.jwtauth.entity",
-		"fi.ishtech.practice.bookapp.entity"
+		"fi.ishtech.practice.springboot.booksapp.entity"
 })
 @EnableJpaRepositories(basePackages = {
 		"fi.ishtech.springboot.jwtauth.repo",
-		"fi.ishtech.practice.bookapp.repository"
+		"fi.ishtech.practice.springboot.booksapp.repository"
 })
 // @formatter:on
 public class BookApplication {

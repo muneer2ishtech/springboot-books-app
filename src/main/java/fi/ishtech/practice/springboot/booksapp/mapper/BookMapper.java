@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.mapper;
+package fi.ishtech.practice.springboot.booksapp.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.InheritConfiguration;
@@ -10,8 +10,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import fi.ishtech.base.annotations.mapstruct.BriefMapping;
 import fi.ishtech.base.mapper.BaseStandardMapper;
-import fi.ishtech.practice.bookapp.dto.BookDto;
-import fi.ishtech.practice.bookapp.entity.Book;
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.entity.Book;
 
 /**
  * Mapper for {@link BookDto} to {@link Book} entity and vice-versa

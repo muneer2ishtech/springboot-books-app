@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.controller;
+package fi.ishtech.practice.springboot.booksapp.controller;
 
 import jakarta.validation.Valid;
 
@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import fi.ishtech.practice.bookapp.dao.BookDao;
-import fi.ishtech.practice.bookapp.dto.BookDto;
-import fi.ishtech.practice.bookapp.dto.BookFilterParams;
-import fi.ishtech.practice.bookapp.service.BookService;
-import fi.ishtech.practice.bookapp.spec.BookSpec;
-
+import fi.ishtech.practice.springboot.booksapp.dao.BookDao;
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.dto.BookFilterParams;
+import fi.ishtech.practice.springboot.booksapp.service.BookService;
+import fi.ishtech.practice.springboot.booksapp.spec.BookSpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

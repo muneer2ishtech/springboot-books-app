@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.spec;
+package fi.ishtech.practice.springboot.booksapp.spec;
 
 import java.io.Serial;
 import java.util.List;
@@ -8,9 +8,9 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 import fi.ishtech.base.spec.BaseStandardSpec;
-import fi.ishtech.practice.bookapp.dto.BookFilterParams;
-import fi.ishtech.practice.bookapp.entity.Book;
-import fi.ishtech.practice.bookapp.entity.Book_;
+import fi.ishtech.practice.springboot.booksapp.dto.BookFilterParams;
+import fi.ishtech.practice.springboot.booksapp.entity.Book;
+import fi.ishtech.practice.springboot.booksapp.entity.Book_;
 
 /**
  * Specification for Book

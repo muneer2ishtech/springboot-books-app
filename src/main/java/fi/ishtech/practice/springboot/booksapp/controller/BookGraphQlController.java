@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.controller;
+package fi.ishtech.practice.springboot.booksapp.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import fi.ishtech.practice.bookapp.dto.BookDto;
-import fi.ishtech.practice.bookapp.service.BookService;
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.service.BookService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
