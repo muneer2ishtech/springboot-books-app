@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		"fi.ishtech.springboot.jwtauth.repo",
 		"fi.ishtech.practice.bookapp.repository"
 })
-//@formatter:on
+// @formatter:on
 public class BookApplication {
 
 	public static void main(String[] args) {
