@@ -30,7 +30,7 @@ docker build . \
 
 ```
 docker run \
-  muneer2ishtech/springboot-book-app:x.y.z
+  muneer2ishtech/springboot-books-app:x.y.z
 ```
 
 - To run by exposing on a different port  
@@ -39,7 +39,7 @@ docker run \
 ```
 docker run \
   -p 8282:8080 \
-  muneer2ishtech/springboot-book-app:x.y.z
+  muneer2ishtech/springboot-books-app:x.y.z
 ```
 
 - To run with custom application port inside container  
@@ -49,7 +49,7 @@ docker run \
 docker run \
   -e SERVER_PORT=8181 \
   -p 8282:8181 \
-  muneer2ishtech/springboot-book-app:x.y.z
+  muneer2ishtech/springboot-books-app:x.y.z
 ```
 
 

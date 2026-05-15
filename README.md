@@ -1,4 +1,4 @@
-# springboot-book-app
+# springboot-books-app
 Books managing application using Spring Boot
 
 ## Tech stack
@@ -10,7 +10,7 @@ Books managing application using Spring Boot
 
 ##
 
-[GIT](https://github.com/muneer2ishtech/springboot-book-app)
+[GIT](https://github.com/muneer2ishtech/springboot-books-app)
 
 
 ## Design

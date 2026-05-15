@@ -1,28 +1,28 @@
 services:
-  ishtech-springboot-book-app:
+  ishtech-springboot-books-app:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         SERVER_PORT: ${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}
         APP_VERSION: ${APP_VERSION}
-    image: muneer2ishtech/ishtech-springboot-book-app${APP_VERSION:+:$APP_VERSION}
-    container_name: ishtech_springboot_book_app
+    image: muneer2ishtech/ishtech-springboot-books-app${APP_VERSION:+:$APP_VERSION}
+    container_name: ishtech_springboot_books_app
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ishtech-springboot-book-postgres:5432/ishtech_dev_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ishtech-springboot-books-postgres:5432/ishtech_dev_db
     ports:
       - "${SERVER_PORT_LOCAL:-${SERVER_PORT:-8080}}:${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}"
     depends_on:
-      ishtech-springboot-book-postgres:
+      ishtech-springboot-books-postgres:
         condition: service_healthy
     networks:
-      - ishtech-springboot-book-network
+      - ishtech-springboot-books-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT_LOCAL:-${SERVER_PORT:-8080}}/actuator/health"]
       start_period: 60s
 
-  ishtech-springboot-book-postgres:
+  ishtech-springboot-books-postgres:
     image: postgres:18
     container_name: ishtech_springboot_book_postgres
     environment:
@@ -35,7 +35,7 @@ services:
       - ishtech_springboot_book_postgres_data:/var/lib/postgresql/18/data
       - ./src/test/resources/db/init_db.sql:/docker-entrypoint-initdb.d/bookapp_dev_init_db.sql
     networks:
-      - ishtech-springboot-book-network
+      - ishtech-springboot-books-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       start_period: 45s
@@ -44,5 +44,5 @@ volumes:
   ishtech_springboot_book_postgres_data:
 
 networks:
-  ishtech-springboot-book-network:
+  ishtech-springboot-books-network:
     driver: bridge
