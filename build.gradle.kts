@@ -51,7 +51,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
@@ -66,8 +66,6 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
 
 	runtimeOnly("org.postgresql:postgresql")
-
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
 	annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
