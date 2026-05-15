@@ -22,6 +22,7 @@ Books managing application using Spring Boot
 - For details you can see swagger documentation
     - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
     - [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+    - [http://localhost:8080/v3/api-docs.yaml](http://localhost:8080/v3//v3/api-docs.yaml)
 
 - Note: Check and update URI and PORT on which application is running
 
@@ -128,7 +129,7 @@ docker run \
 
 ```
 docker run \
-  -p 8282:8080
+  -p 8282:8080 \
   muneer2ishtech/springboot-book-app:x.y.z
 ```
 
@@ -137,15 +138,15 @@ docker run \
 
 ```
 docker run \
-  -p 8282:8181
-  -e SERVER_PORT=8181
+  -e SERVER_PORT=8181 \
+  -p 8282:8181 \
   muneer2ishtech/springboot-book-app:x.y.z
 ```
 
 
 #### Run with docker compose
 
-- Docker compose is self contained and has both spring-boot application and mariadb is present, so  you don't need anything else other than docker
+- Docker compose is self contained and has both spring-boot application and db is present, so  you don't need anything else other than docker
 
 - To stop if running
     - `docker compose stop`
@@ -161,7 +162,9 @@ docker run \
         - `SERVER_PORT_LOCAL` if skipped spring-boot app will be exposed on default `8080`
 
 ```
-SERVER_PORT_LOCAL=8181 DB_PORT=25432 \
+SERVER_PORT_LOCAL=8181 \
+DB_PORT=25432 \
+APP_VERSION=$(./gradlew -q printVersion 2>/dev/null) \
 docker compose up --build
 
 ```
