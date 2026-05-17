@@ -17,6 +17,24 @@ Books managing application using Spring Boot
 - [ishtech-jpa-base](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
 - [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentication & Authorization
 
+### Some design considerations
+1. Using DB migrations e.g. flyway (or alternatives like liquibase) are better, as you can keep your code changes and DB changes in sync.
+     1. `spring.jpa.hibernate.ddl-auto=create-drop` should never be used in production DB
+     1. `spring.jpa.hibernate.ddl-auto=update` can keep up with entity class changes, but can cause irrevocable loss to data, e.g. if entity attribute is removed or class itself is removed by mistake it will drop columns or tables.
+
+
+### Some Code considerations
+1. You can avoid explicit `@Table(name = "t_...")` by extending `CamelCaseToUnderscoresNamingStrategy` and setting `spring.jpa.hibernate.naming.physical-strategy` in `application.properties`
+
+1. If you are having both column value and FK relation in the entity class then, you must mention `name` in `@Column`, else you will get error like
+
+```
+Table [t_user_role] contains physical column name [user_id] referred to by multiple logical column names: [user_id], [userId]
+```
+
+1. FK names, Unique constraint names, enum definitions are given explicitly in entity classes, so that they also can work with so that it can work smoothly with `spring.jpa.hibernate.ddl-auto` with values of `create`, `create-drop`, `update`
+
+
 ## APIs
 
 - For details you can see swagger documentation
