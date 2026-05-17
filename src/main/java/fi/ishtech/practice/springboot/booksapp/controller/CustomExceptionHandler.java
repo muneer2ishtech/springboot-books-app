@@ -2,6 +2,7 @@ package fi.ishtech.practice.springboot.booksapp.controller;
 
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang3.Strings;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,9 @@ public class CustomExceptionHandler {
 	public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
 		log.error("handle DataIntegrityViolationException", ex);
 
-		if (ex.getMessage().contains("violates unique constraint")) {
-			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+		if (Strings.CI.contains(ex.getMessage(), "Unique index or primary key violation")
+				&& Strings.CI.contains(ex.getMessage(), "uk_book_title_author")) {
+			return ResponseEntity.badRequest().body("Book title and author combination already exists");
 		}
 
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,7 +42,7 @@ public class CustomExceptionHandler {
 	public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
 		log.error("handle NoSuchElementException", ex);
 
-		return ResponseEntity.badRequest().body(ex.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 
 }
