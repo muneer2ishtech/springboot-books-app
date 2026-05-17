@@ -236,7 +236,7 @@ curl --request DELETE --location 'http://localhost:8080/api/v1/books/1' \
 ```json
 {
   "title": "Sql Injector Test 2",
-  "author": "',0,0); DELETE FROM bookapp_dev_schema.t_dummy; --",
+  "author": "',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --",
   "year": 1900,
   "price": 99.99
 }
@@ -259,7 +259,7 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/with-prep-stm
 --header 'Content-Type: application/json' \
 --data-raw '{
   "title": "Sql Injector Test 2",
-  "author": "',0,0); DELETE FROM bookapp_dev_schema.t_dummy; --",
+  "author": "',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --",
   "year": 1900,
   "price": 99.99
 }'
@@ -282,7 +282,7 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/with-prep-stm
 ```json
 {
   "title": "Sql Injector Test 3",
-  "author": "',0,0); DELETE FROM bookapp_dev_schema.t_dummy; --",
+  "author": "',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --",
   "year": 1900,
   "price": 99.99
 }
@@ -300,7 +300,7 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/without-prep-
 --header 'Content-Type: application/json' \
 --data-raw '{
   "title": "Sql Injector Test 3",
-  "author": "',0,0); DELETE FROM bookapp_dev_schema.t_dummy; --",
+  "author": "',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --",
   "year": 1900,
   "price": 99.99
 }'

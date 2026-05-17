@@ -33,7 +33,7 @@ services:
       - "${DB_PORT:-5432}:5432"
     volumes:
       - ishtech_springboot_book_postgres_data:/var/lib/postgresql/18/data
-      - ./src/test/resources/db/init_db.sql:/docker-entrypoint-initdb.d/bookapp_dev_init_db.sql
+      - ./src/test/resources/db/init_db.sql:/docker-entrypoint-initdb.d/booksapp_dev_init_db.sql
     networks:
       - ishtech-springboot-books-network
     healthcheck:
