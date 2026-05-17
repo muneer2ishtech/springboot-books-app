@@ -4,7 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "fi.ishtech.practice"
+group = "fi.ishtech.practice.springboot"
 version = "0.5.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
