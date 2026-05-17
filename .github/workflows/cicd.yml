@@ -1,0 +1,36 @@
+# see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+name: Java CI with Maven and Docker
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Extract Maven project version
+      id: project-version
+      run: |
+        echo "project_version=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout 2>/dev/null)" \
+          >> $GITHUB_OUTPUT
+
+    - name: Build with Maven
+      run: ./mvnw -B package -DskipTests=true
+
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile \
+         --tag muneer2ishtech/ishtech-springboot-multi-port:${{ steps.project-version.outputs.project_version }}
