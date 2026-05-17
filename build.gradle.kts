@@ -72,15 +72,23 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}")
 
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
 	testRuntimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
+	testImplementation("org.springframework.boot:spring-boot-webmvc-test")
+	testImplementation("com.google.code.gson:gson")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+
+	testLogging {
+		events("passed", "skipped", "failed")
+	}
 }
 
 tasks.register("printVersion") {
