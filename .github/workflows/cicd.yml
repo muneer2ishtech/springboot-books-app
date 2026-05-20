@@ -3,8 +3,11 @@
 name: Java CI with Maven and Docker
 
 on:
+  # Only on push to any branches or on publishing release tag
   push:
-    branches: [ "main" ]
+    branches:
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
 
 jobs:
   build:
@@ -31,6 +34,7 @@ jobs:
       run: ./gradlew clean build
 
     - name: Build the Docker image
+      if: github.ref_type == 'tag' && github.event.base_ref == 'refs/heads/main'
       run: |
         docker build . --file Dockerfile \
-         --tag muneer2ishtech/ishtech-springboot-books-app:${{ steps.project-version.outputs.project_version }}
+          --tag muneer2ishtech/ishtech-springboot-books-app:${{ steps.project-version.outputs.project_version }}
