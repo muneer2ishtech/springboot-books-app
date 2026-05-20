@@ -21,16 +21,16 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Extract Maven project version
+    - name: Extract Gradle project version
       id: project-version
       run: |
-        echo "project_version=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout 2>/dev/null)" \
-          >> $GITHUB_OUTPUT
+        chmod +x ./gradlew
+        echo "project_version=$(./gradlew -q printVersion 2>/dev/null)" >> $GITHUB_OUTPUT
 
-    - name: Build with Maven
-      run: ./mvnw -B package -DskipTests=true
+    - name: Build with Gradle
+      run: ./gradlew clean build
 
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile \
-         --tag muneer2ishtech/ishtech-springboot-multi-port:${{ steps.project-version.outputs.project_version }}
+         --tag muneer2ishtech/ishtech-springboot-books-app:${{ steps.project-version.outputs.project_version }}
