@@ -27,16 +27,39 @@
 ### Response JSON
 
 ```json
-[
-  {
-    "id": 1,
-    "title": "Dune",
-    "author": "Frank Herbert",
-    "year": 1965,
-    "price": 29.99
-  }
-]
+{
+  "content": [
+    ...
+  ],
+  "empty": false,
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 20,
+  "pageable": {
+    "offset": 0,
+    "pageNumber": 0,
+    "pageSize": 20,
+    "paged": true,
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
+    "unpaged": false
+  },
+  "size": 20,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "totalElements": 90,
+  "totalPages": 5
+}
 ```
+
+- Content is array of Books data, as in response of [Get Book By ID](#get-book-by-id)
 
 ### CURL
 
