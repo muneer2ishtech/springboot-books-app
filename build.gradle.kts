@@ -9,7 +9,7 @@ version = "0.5.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 // Centralized version declarations
-val ishtechBaseJpaVersion = "5.1.0"
+val ishtechBaseJpaVersion = "5.2.0-SNAPSHOT"
 val ishtechSpringbootJwtauthVersion = "3.1.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
