@@ -30,6 +30,7 @@ docker build . \
 
 ```
 docker run \
+  -p 8080:8080 \
   muneer2ishtech/springboot-books-app:x.y.z
 ```
 
@@ -42,12 +43,11 @@ docker run \
   muneer2ishtech/springboot-books-app:x.y.z
 ```
 
-- To run with custom application port inside container  
-  - E.g.: Spring Boot runs on `8181`, exposed on `8282`
+- To run an image built with custom `SERVER_PORT`  
+  - E.g.: built with `SERVER_PORT=8181`, expose on `8282`
 
 ```
 docker run \
-  -e SERVER_PORT=8181 \
   -p 8282:8181 \
   muneer2ishtech/springboot-books-app:x.y.z
 ```
