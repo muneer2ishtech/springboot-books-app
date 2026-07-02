@@ -60,11 +60,11 @@ jobs:
 
       # 2. Compile
     - name: Gradle Compile
-      run: ./gradlew clean build
+      run: ./gradlew clean build -x test
 
       # 3. Test
-      - name: Gradle Test
-        run: ./mvnw $MAVEN_CLI_OPTS test -Dmaven.main.skip=true
+    - name: Gradle Test
+      run: ./gradlew test
 
       # 4. Release (only when conditions match)
     - name: Login to Docker Hub
