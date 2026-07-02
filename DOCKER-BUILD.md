@@ -21,7 +21,8 @@ docker build . \
 
 ### Run with docker image
 
-- Note: check and use version from pom.xml
+- Note: check and use version from build.gradle.kts
+  - Replace `x.y.z` with appropriate version number, e.g. `1.0.0` or `1.1.0-SNAPSHOT`
 - Add option ` -d` if you want to run in background
 
 
@@ -31,23 +32,31 @@ docker build . \
 ```
 docker run \
   -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=dev \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:15432/ishtech_dev_db \
   muneer2ishtech/springboot-books-app:x.y.z
 ```
+
+- If `host.docker.internal` doesn't resolve by default then `--add-host=host.docker.internal:host-gateway`
+
 
 - To run by exposing on a different port  
   - Example: expose on `8282` (container still runs on `8080`)
 
 ```
 docker run \
+  ...
   -p 8282:8080 \
   muneer2ishtech/springboot-books-app:x.y.z
 ```
 
-- To run an image built with custom `SERVER_PORT`  
-  - E.g.: built with `SERVER_PORT=8181`, expose on `8282`
+- To run with custom application port inside container  
+  - E.g.: Spring Boot runs on `8181`, exposed on `8282`
 
 ```
 docker run \
+  ...
+  -e SERVER_PORT=8181 \
   -p 8282:8181 \
   muneer2ishtech/springboot-books-app:x.y.z
 ```

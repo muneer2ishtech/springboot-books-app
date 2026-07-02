@@ -6,7 +6,7 @@ services:
       args:
         SERVER_PORT: ${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}
         APP_VERSION: ${APP_VERSION}
-    image: muneer2ishtech/ishtech-springboot-books-app${APP_VERSION:+:$APP_VERSION}
+    image: muneer2ishtech/ishtech-springboot-books-app:${APP_VERSION:+$APP_VERSION}
     container_name: ishtech_springboot_books_app
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
@@ -24,7 +24,7 @@ services:
 
   ishtech-springboot-books-postgres:
     image: postgres:18
-    container_name: ishtech_springboot_book_postgres
+    container_name: ishtech_springboot_books_postgres
     environment:
       - POSTGRES_DB=ishtech_dev_db
       - POSTGRES_USER=ishtech_dev_user
@@ -32,8 +32,8 @@ services:
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
-      - ishtech_springboot_book_postgres_data:/var/lib/postgresql/18/data
-      - ./src/test/resources/db/init_db.sql:/docker-entrypoint-initdb.d/booksapp_dev_init_db.sql
+      - ishtech_springboot_books_postgres_data:/var/lib/postgresql/18/data
+      - ./src/test/resources/db/postgres/init_db.sql:/docker-entrypoint-initdb.d/booksapp_dev_init_db.sql
     networks:
       - ishtech-springboot-books-network
     healthcheck:
@@ -41,7 +41,7 @@ services:
       start_period: 45s
 
 volumes:
-  ishtech_springboot_book_postgres_data:
+  ishtech_springboot_books_postgres_data:
 
 networks:
   ishtech-springboot-books-network:
