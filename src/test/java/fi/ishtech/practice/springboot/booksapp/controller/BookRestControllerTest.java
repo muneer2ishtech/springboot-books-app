@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.google.gson.Gson;
 
 import fi.ishtech.practice.springboot.booksapp.BookApplication;
+import fi.ishtech.practice.springboot.booksapp.dao.BookDao;
 import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import fi.ishtech.practice.springboot.booksapp.entity.Book;
 import fi.ishtech.practice.springboot.booksapp.service.BookService;
@@ -53,6 +54,9 @@ public class BookRestControllerTest {
 
 	@MockitoBean
 	private BookService bookService;
+
+	@MockitoBean
+	private BookDao bookDao;
 
 	@Test
 	@Order(1)
@@ -310,6 +314,52 @@ public class BookRestControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.content[0].title", is("Dune")))
 			.andExpect(jsonPath("$.content[0].author", is("Frank Herbert")));
+		// @formatter:on
+	}
+
+	@Test
+	@Order(13)
+	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
+	public void testWithPrepStmtSuccess() throws Exception {
+		BookDto book = new BookDto();
+		book.setTitle("Sql Injector Test 2");
+		book.setAuthor("',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --");
+		book.setYear(Short.valueOf("1900"));
+		book.setPrice(new BigDecimal("99.99"));
+
+		doNothing().when(bookDao).saveWithPreparedStatement(any(BookDto.class));
+
+		Gson gson = new Gson();
+		String requestJson = gson.toJson(book);
+
+		// @formatter:off
+		mvc.perform(post("/api/v1/books/with-prep-stmt")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
+			.andExpect(status().isCreated());
+		// @formatter:on
+	}
+
+	@Test
+	@Order(14)
+	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
+	public void testWithoutPrepStmtSuccess() throws Exception {
+		BookDto book = new BookDto();
+		book.setTitle("Sql Injector Test 3");
+		book.setAuthor("',0,0); DELETE FROM booksapp_dev_schema.t_dummy; --");
+		book.setYear(Short.valueOf("1900"));
+		book.setPrice(new BigDecimal("99.99"));
+
+		doNothing().when(bookDao).saveWithoutPreparedStatementWithoutEscapes(any(BookDto.class));
+
+		Gson gson = new Gson();
+		String requestJson = gson.toJson(book);
+
+		// @formatter:off
+		mvc.perform(post("/api/v1/books/without-prep-stmt")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
+			.andExpect(status().isCreated());
 		// @formatter:on
 	}
 
