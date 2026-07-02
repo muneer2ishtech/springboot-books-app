@@ -242,10 +242,15 @@ curl --request DELETE --location 'http://localhost:8080/api/v1/books/1' \
 --header 'Authorization: Bearer <ACCESS_TOKEN>'
 ```
 
-## Create Book (Prepared Statement)
+## SQL Injection Test - with Prepared Statement - Create Book
+
 - Uses SQL prepared statement (DAO layer).
 - Input is parameterized and treated as data.
 - Safe against SQL Injection.
+
+### Prerequisites
+- Ensure `t_dummy` exists with test data as in `src/test/resources/db/postgres/create_table_dummy.sql` every time before test
+- Note: change `title` in request body if repeating the test (unique constraint on `title` + `author`)
 
 ### Request Details
 - URL: `/api/v1/books/with-prep-stmt`
@@ -253,6 +258,11 @@ curl --request DELETE --location 'http://localhost:8080/api/v1/books/1' \
 
 ### Response Details
 - HTTP Response Code: `201 - Created`
+- **Test Verification** After running this curl: verify `t_dummy` still has rows (to ensure SQL injection was blocked)
+
+    ```sql
+    SELECT COUNT(*) FROM booksapp_dev_schema.t_dummy;
+    ```
 
 ### Request JSON
 
@@ -267,12 +277,8 @@ curl --request DELETE --location 'http://localhost:8080/api/v1/books/1' \
 
 ### Response JSON
 
-```json
-{
-  "id": 1,
-  "title": "Sql Injector Test 2"
-}
-```
+NOT RELEVANT
+
 
 ### CURL
 
@@ -288,17 +294,28 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/with-prep-stm
 }'
 ```
 
-## Create Book (Without Prepared Statement)
+## SQL Injection Test - without Prepared Statement - Create Book
+
 - Does not use prepared statements; uses string concatenation in SQL.
 - Input is directly embedded into query.
 - Vulnerable to SQL Injection (Unsafe).
+
+### Prerequisites
+- Ensure `t_dummy` exists with test data as in `src/test/resources/db/postgres/create_table_dummy.sql` every time before test
+- Note: change `title` in request body if repeating the test (unique constraint on `title` + `author`)
 
 ### Request Details
 - URL: `/api/v1/books/without-prep-stmt`
 - HTTP Method: `POST`
 
 ### Response Details
-- Typically results in HTTP Response Code: `500 - Internal Server Error
+- HTTP response code is not relevant
+- **Test Verification** After running this curl: verify `t_dummy` has no rows (SQL injection should delete data)
+
+    ```sql
+    SELECT COUNT(*) FROM booksapp_dev_schema.t_dummy;
+    ```
+- Application logs show execution of the injected DELETE statement
 
 ### Request JSON
 
@@ -313,7 +330,8 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/with-prep-stm
 
 ### Response JSON
 
-NOT RELAVANT
+NOT RELEVANT
+
 
 ### CURL
 
