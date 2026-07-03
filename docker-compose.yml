@@ -19,7 +19,7 @@ services:
     networks:
       - ishtech-springboot-books-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT_LOCAL:-${SERVER_PORT:-8080}}/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}/actuator/health"]
       start_period: 60s
 
   ishtech-springboot-books-postgres:
