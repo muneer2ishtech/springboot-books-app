@@ -75,11 +75,12 @@ docker run \
 - To build and start
     - You can prefix with env vars as in below example
     - Below args are optional, you can change to desired value or skip, if skipped they will use default value
-        - `DB_PORT` if skipped DB will be exposed on default `5432`
-        - `SERVER_PORT_REMOTE` if skipped spring-boot app will run on default `8080`
-        - `SERVER_PORT_LOCAL` if skipped spring-boot app will be exposed on default `8080`
+        - `DB_PORT` — port DB is exposed on the **host machine**, if skipped defaults to `5432`
+        - `SERVER_PORT_REMOTE` — port Spring Boot runs on **inside the container**, if skipped defaults to `8080`
+        - `SERVER_PORT_LOCAL` — port the app is exposed on the **host machine**, if skipped defaults to `SERVER_PORT_REMOTE`
 
 ```
+SERVER_PORT_REMOTE=8080 \
 SERVER_PORT_LOCAL=8181 \
 DB_PORT=25432 \
 APP_VERSION=$(./gradlew -q printVersion 2>/dev/null) \
