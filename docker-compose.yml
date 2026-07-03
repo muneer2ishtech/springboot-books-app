@@ -5,7 +5,6 @@ services:
       dockerfile: Dockerfile
       args:
         SERVER_PORT: ${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}
-        APP_VERSION: ${APP_VERSION}
     image: muneer2ishtech/ishtech-springboot-books-app${APP_VERSION:+:$APP_VERSION}
     container_name: ishtech_springboot_books_app
     environment:
