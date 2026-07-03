@@ -1,71 +1,58 @@
-# springboot-book-app
+# springboot-books-app
 Books managing application using Spring Boot
 
 ## Tech stack
 - Java: 25
-- Spring Boot: 4.0.6
+- Spring Boot: 4.0.x
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
 
 ##
 
-[GIT](https://github.com/muneer2ishtech/springboot-book-app)
+[GIT](https://github.com/muneer2ishtech/springboot-books-app)
 
 
 ## Design
 - [ishtech-jpa-base](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
 - [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentication & Authorization
 
+### Some design considerations
+1. Using DB migrations e.g. flyway (or alternatives like liquibase) are better, as you can keep your code changes and DB changes in sync.
+     1. `spring.jpa.hibernate.ddl-auto=create-drop` should never be used in production DB
+     1. `spring.jpa.hibernate.ddl-auto=update` can keep up with entity class changes, but can cause irrevocable loss to data, e.g. if entity attribute is removed or class itself is removed by mistake it will drop columns or tables.
+
+
+### Some Code considerations
+1. You can avoid explicit `@Table(name = "t_...")` by extending `CamelCaseToUnderscoresNamingStrategy` and setting `spring.jpa.hibernate.naming.physical-strategy` in `application.properties`
+
+1. If you are having both column value and FK relation in the entity class then, you must mention `name` in `@Column`, else you will get error like
+
+```
+Table [t_user_role] contains physical column name [user_id] referred to by multiple logical column names: [user_id], [userId]
+```
+
+1. FK names, Unique constraint names, enum definitions are given explicitly in entity classes, so that they also can work with so that it can work smoothly with `spring.jpa.hibernate.ddl-auto` with values of `create`, `create-drop`, `update`
+
+
 ## APIs
 
 - For details you can see swagger documentation
     - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
     - [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
-
+    - [http://localhost:8080/v3/api-docs.yaml](http://localhost:8080/v3//v3/api-docs.yaml)
 
 - Note: Check and update URI and PORT on which application is running
 
-
-- For quick API information:
+- For API names and descriptions:
     - See [API-INFO.md](./API-INFO.md)
 
-- For `curl` request/response samples:
+- For `curl` & `json` request/response samples:
     - See [CURL-INFO.md](./CURL-INFO.md)
 
 
-- For Authentication & Authorization APIs:
-    - See [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth)
-
-
-## DB
-
-### Local
-- You need local instance or docker of local PostgreSQL
-
-- I have customized docker for various databases
-    - For PostgreSQL
-        - See [https://github.com/IshTech/docker-db/tree/main/postgres](https://github.com/IshTech/docker-db/tree/main/postgres)
-
-- Login to DB as `root` / `superuser` and run [init_db.sql](src/test/resources/db/postgres/init_db.sql) to setup DB Schema, DB User and Grant privileges
-
-#### DB Access
-
-```
-psql -U ishtech_dev_user -W -d ishtech_dev_db
-```
-
-- Enter password on prompt `ishtech_dev_pass`
-
-### Flyway migration files
-- Path `src/main/resources/db/migration/postgres`
-- To create migration files with date and time in the file name
-    - E.g. `V20251022_020018__create_table_book.sql`
-
-```
-touch src/main/resources/db/migration/postgres/V$(date +"%Y%m%d_%H%M%S")__create_table_TODO_PUT_TABLE_NAME_WITHOUT_PREFIX.sql
-
-```
+## Database
+- See [DB-SETUP.md](./DB-SETUP.md) for setting up dev database
 
 
 ## Build and Run
@@ -96,34 +83,4 @@ touch src/main/resources/db/migration/postgres/V$(date +"%Y%m%d_%H%M%S")__create
 
 ### Docker
 
-#### Docker build
-
-```
-docker build . \
-  --build-arg SERVER_PORT=8080 \
-  -t "muneer2ishtech/$(./gradlew -q printProjectName):$(./gradlew -q printVersion)"
-
-```
-
-#### Run with docker compose
-
-- Docker compose is self contained and has both spring-boot application and mariadb is present, so  you don't need anything else other than docker
-
-- To stop if running
-    - `docker compose stop`
-
-- To stop and remove including volumes and built images
-    - `docker compose down -v --rmi=local`
-
-- To build and start
-    - You can prefix with env vars as in below example
-    - Below args are optional, you can change to desired value or skip, if skipped they will use default value
-        - `DB_PORT` if skipped DB will be exposed on default `3306`
-        - `SERVER_PORT_REMOTE` if skipped spring-boot app will run on default `8080`
-        - `SERVER_PORT_LOCAL` if skipped spring-boot app will be exposed on default `8080`
-
-```
-SERVER_PORT_LOCAL=8383 DB_PORT=25432 APP_VERSION=$(./gradlew -q printVersion) \
-docker compose up --build
-
-```
+- See [DOCKER-BUILD.md](./DOCKER-BUILD.md)

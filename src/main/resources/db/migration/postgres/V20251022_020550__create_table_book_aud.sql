@@ -1,4 +1,4 @@
-CREATE TABLE ${audit_schema_name}.book_aud (
+CREATE TABLE ${audit_schema_name}.t_book_aud (
   id            BIGINT        NOT NULL,
   rev           BIGINT        NOT NULL,
   revtype       SMALLINT      NOT NULL,

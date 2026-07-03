@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.entity;
+package fi.ishtech.practice.springboot.booksapp.entity;
 
 import java.io.Serial;
 import java.math.BigDecimal;

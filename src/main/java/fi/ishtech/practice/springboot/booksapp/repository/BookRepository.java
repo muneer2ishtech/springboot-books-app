@@ -1,7 +1,7 @@
-package fi.ishtech.practice.bookapp.repository;
+package fi.ishtech.practice.springboot.booksapp.repository;
 
 import fi.ishtech.base.repo.BaseStandardRepo;
-import fi.ishtech.practice.bookapp.entity.Book;
+import fi.ishtech.practice.springboot.booksapp.entity.Book;
 
 /**
  * Repository for entity {@link Book}

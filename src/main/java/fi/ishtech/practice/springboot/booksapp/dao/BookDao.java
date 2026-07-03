@@ -1,9 +1,9 @@
-package fi.ishtech.practice.bookapp.dao;
+package fi.ishtech.practice.springboot.booksapp.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import fi.ishtech.practice.bookapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +25,7 @@ public class BookDao {
 	 * @param bookDto {@link BookDto}
 	 */
 	public void saveWithPreparedStatement(BookDto bookDto) {
-		String sql = "INSERT INTO bookapp_dev_schema.t_book (title, author, year, price) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO booksapp_dev_schema.t_book (title, author, year, price) VALUES (?, ?, ?, ?)";
 		jdbcTemplate.update(sql,
 				bookDto.getTitle(),
 				bookDto.getAuthor(),
@@ -39,7 +39,7 @@ public class BookDao {
 	 * @param bookDto {@link BookDto}
 	 */
 	public void saveWithoutPreparedStatementWithEscapes(BookDto book) {
-		String sql = String.format("INSERT INTO bookapp_dev_schema.t_book (title, author, year, price) VALUES ('%s', '%s', %d, %f)",
+		String sql = String.format("INSERT INTO booksapp_dev_schema.t_book (title, author, year, price) VALUES ('%s', '%s', %d, %f)",
 				book.getTitle().replace("'", "''"), // Basic escaping for single quotes
 				book.getAuthor().replace("'", "''"), // Basic escaping for single quotes
 				book.getYear(), book.getPrice());
@@ -53,7 +53,7 @@ public class BookDao {
 	 * @param bookDto {@link BookDto}
 	 */
 	public void saveWithoutPreparedStatementWithoutEscapes(BookDto book) {
-		String sql = String.format("INSERT INTO bookapp_dev_schema.t_book (title, author, year, price) VALUES ('%s', '%s', %d, %f)",
+		String sql = String.format("INSERT INTO booksapp_dev_schema.t_book (title, author, year, price) VALUES ('%s', '%s', %d, %f)",
 				book.getTitle(),
 				book.getAuthor(),
 				book.getYear(), book.getPrice());

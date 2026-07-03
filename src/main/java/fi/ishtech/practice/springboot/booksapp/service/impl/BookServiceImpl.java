@@ -1,4 +1,4 @@
-package fi.ishtech.practice.bookapp.service.impl;
+package fi.ishtech.practice.springboot.booksapp.service.impl;
 
 import java.util.List;
 
@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import fi.ishtech.practice.bookapp.dto.BookDto;
-import fi.ishtech.practice.bookapp.entity.Book;
-import fi.ishtech.practice.bookapp.mapper.BookMapper;
-import fi.ishtech.practice.bookapp.repository.BookRepository;
-import fi.ishtech.practice.bookapp.service.BookService;
-import fi.ishtech.practice.bookapp.spec.BookSpec;
-
+import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
+import fi.ishtech.practice.springboot.booksapp.entity.Book;
+import fi.ishtech.practice.springboot.booksapp.mapper.BookMapper;
+import fi.ishtech.practice.springboot.booksapp.repository.BookRepository;
+import fi.ishtech.practice.springboot.booksapp.service.BookService;
+import fi.ishtech.practice.springboot.booksapp.spec.BookSpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,6 +72,7 @@ public class BookServiceImpl implements BookService {
 		Book book = bookMapper.toNewEntity(bookDto);
 
 		book = bookRepository.save(book);
+		log.info("Created Book({})", book.getId());
 
 		return bookMapper.toBriefDto(book);
 	}
@@ -86,6 +86,7 @@ public class BookServiceImpl implements BookService {
 		bookMapper.toEntity(bookDto, book);
 
 		book = bookRepository.save(book);
+		log.info("Updated Book({})", book.getId());
 
 		return bookMapper.toBriefDto(book);
 	}
@@ -93,6 +94,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void deleteById(Long id) {
 		bookRepository.deleteById(id);
+		log.info("Deleted Book({})", id);
 	}
 
 }
