@@ -55,6 +55,10 @@ Table [t_user_role] contains physical column name [user_id] referred to by multi
 - See [DB-SETUP.md](./DB-SETUP.md) for setting up dev database
 
 
+## Known Issues
+- See [KNOWN-ISSUES.md](./KNOWN-ISSUES.md)
+
+
 ## Build and Run
 
 - Ensure the port, db properties etc are correct in application-xxx.properties
