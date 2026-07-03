@@ -15,6 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+
+import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -257,6 +260,31 @@ public class BookRestControllerTest {
 	@Test
 	@Order(10)
 	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
+	public void testUpdateBookFailForInvalidYear() throws Exception {
+		BookDto book = new BookDto();
+		book.setTitle("Intro to Java");
+		book.setAuthor("Muneer");
+		book.setYear(Short.valueOf("2999"));
+		book.setPrice(new BigDecimal("56.78"));
+
+		when(bookService.updateByIdAndMapToDto(eq(1L), any(BookDto.class))).thenThrow(
+				new ConstraintViolationException("updateByIdAndMapToDto.book.year: must not be greater than the current year",
+						Set.of()));
+
+		Gson gson = new Gson();
+		String requestJson = gson.toJson(book);
+
+		// @formatter:off
+		mvc.perform(put("/api/v1/books/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
+			.andExpect(status().isBadRequest());
+		// @formatter:on
+	}
+
+	@Test
+	@Order(11)
+	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
 	public void testUpdateBookFailForNotFound() throws Exception {
 		BookDto book = new BookDto();
 		book.setTitle("Intro to Java");
@@ -278,7 +306,7 @@ public class BookRestControllerTest {
 	}
 
 	@Test
-	@Order(11)
+	@Order(12)
 	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
 	public void testDeleteBookSuccess() throws Exception {
 		doNothing().when(bookService).deleteById(eq(1L));
@@ -290,7 +318,7 @@ public class BookRestControllerTest {
 	}
 
 	@Test
-	@Order(12)
+	@Order(13)
 	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
 	public void testSearchBooksWithFilters() throws Exception {
 		BookDto book = new BookDto();
@@ -318,7 +346,7 @@ public class BookRestControllerTest {
 	}
 
 	@Test
-	@Order(13)
+	@Order(14)
 	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
 	public void testWithPrepStmtSuccess() throws Exception {
 		BookDto book = new BookDto();
@@ -341,7 +369,7 @@ public class BookRestControllerTest {
 	}
 
 	@Test
-	@Order(14)
+	@Order(15)
 	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
 	public void testWithoutPrepStmtSuccess() throws Exception {
 		BookDto book = new BookDto();

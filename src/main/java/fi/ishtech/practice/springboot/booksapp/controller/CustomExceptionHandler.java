@@ -2,6 +2,8 @@ package fi.ishtech.practice.springboot.booksapp.controller;
 
 import java.util.NoSuchElementException;
 
+import jakarta.validation.ConstraintViolationException;
+
 import org.apache.commons.lang3.Strings;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,13 @@ public class CustomExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
 		log.error("handle IllegalArgumentException", ex);
+
+		return ResponseEntity.badRequest().body(ex.getMessage());
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
+		log.error("handle ConstraintViolationException", ex);
 
 		return ResponseEntity.badRequest().body(ex.getMessage());
 	}

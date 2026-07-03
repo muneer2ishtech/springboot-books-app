@@ -4,39 +4,7 @@ Known issues that have been confirmed by testing but not yet fixed. Each entry h
 
 ---
 
-## 1. Updating a book with invalid data returns `500` instead of `400`
-
-**Status:** Open
-**Impact:** Medium — API consumers get a generic server error instead of a proper validation error, and the response leaks a full internal stack trace.
-**Affects:** `PUT /api/v1/books/{id}`
-
-### Description
-
-`POST /api/v1/books` (create) validates via `@Valid @RequestBody BookDto` directly on the controller method, so a validation failure throws `MethodArgumentNotValidException`, which Spring's default handler maps to `400 Bad Request` automatically.
-
-`PUT /api/v1/books/{id}` (update) does **not** have `@Valid` on its `@RequestBody` parameter. Validation instead happens one layer down, via `@Validated` on `BookServiceImpl` plus `@Valid` on `BookService.updateByIdAndMapToDto(...)`. Spring's method-level validation (AOP) throws `jakarta.validation.ConstraintViolationException` instead, and this app has no `@ExceptionHandler` registered for that exception type — so it falls through to the default handler and returns `500 Internal Server Error` with a full stack trace in the response body.
-
-`CURL-INFO.md` documents `400 - Bad Request` as a possible response for the update endpoint, which is currently inaccurate — the actual response is `500`.
-
-### Steps to reproduce
-
-```sh
-curl -X PUT http://localhost:<port>/api/v1/books/1 \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  -d '{"title":"Some Title","author":"Some Author","year":2999,"price":19.99}'
-```
-
-Expected: `400` with a validation error body (same shape as the create endpoint's `400` response).
-Actual: `500` with a stack trace, `message` field containing `"updateByIdAndMapToDto.book.year: must not be greater than the current year"`.
-
-### Suggested fix
-
-Add an `@ExceptionHandler(ConstraintViolationException.class)` (in a `@ControllerAdvice`/`@RestControllerAdvice`, or the existing global exception handler if one exists) that maps `ConstraintViolationException` to a `400` response, ideally in the same body shape the create endpoint already produces via `MethodArgumentNotValidException`. Add a test covering `PUT` with invalid data asserting `400`, not `500`.
-
----
-
-## 2. Docker container always reports `unhealthy`
+## 1. Docker container always reports `unhealthy`
 
 **Status:** Open
 **Impact:** Low-Medium — doesn't affect the running app, but breaks anything that waits on container health (e.g. `depends_on: condition: service_healthy` in `docker-compose.yml`), and is confusing when checking `docker ps`.
