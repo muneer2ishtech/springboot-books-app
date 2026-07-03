@@ -9,7 +9,7 @@ RUN chmod +x ./gradlew
 
 RUN ./gradlew clean build -x test
 
-RUN find /app/build/libs/ -name "springboot-books-app-*.jar" ! -name "*-plain.jar" -exec cp {} /app/ishtech-springboot-books-app.jar \;
+RUN find /app/build/libs/ -name "ishtech-springboot-books-app-*.jar" ! -name "*-plain.jar" -exec cp {} /app/ishtech-springboot-books-app.jar \;
 
 # ====== Stage 2: Runtime ======
 FROM eclipse-temurin:25-jre

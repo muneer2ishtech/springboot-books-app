@@ -6,7 +6,7 @@
 
 ```
 docker build . \
-  -t "muneer2ishtech/$(./gradlew -q printProjectName):$(./gradlew -q printVersion)"
+  -t "muneer2ishtech/$(./gradlew -q printArtifactId):$(./gradlew -q printVersion)"
 
 ```
 
@@ -15,7 +15,7 @@ docker build . \
 ```
 docker build . \
   --build-arg SERVER_PORT=8181 \
-  -t "muneer2ishtech/$(./gradlew -q printProjectName):$(./gradlew -q printVersion)"
+  -t "muneer2ishtech/$(./gradlew -q printArtifactId):$(./gradlew -q printVersion)"
 
 ```
 
@@ -34,7 +34,7 @@ docker run \
   -p 8080:8080 \
   -e SPRING_PROFILES_ACTIVE=dev \
   -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:15432/ishtech_dev_db \
-  muneer2ishtech/springboot-books-app:x.y.z
+  muneer2ishtech/ishtech-springboot-books-app:x.y.z
 ```
 
 - If `host.docker.internal` doesn't resolve by default then `--add-host=host.docker.internal:host-gateway`
@@ -47,7 +47,7 @@ docker run \
 docker run \
   ...
   -p 8282:8080 \
-  muneer2ishtech/springboot-books-app:x.y.z
+  muneer2ishtech/ishtech-springboot-books-app:x.y.z
 ```
 
 - To run with custom application port inside container  
@@ -58,7 +58,7 @@ docker run \
   ...
   -e SERVER_PORT=8181 \
   -p 8282:8181 \
-  muneer2ishtech/springboot-books-app:x.y.z
+  muneer2ishtech/ishtech-springboot-books-app:x.y.z
 ```
 
 
