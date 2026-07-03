@@ -13,6 +13,7 @@ base.archivesName.set("ishtech-springboot-books-app")
 // Centralized version declarations
 val ishtechBaseJpaVersion = "5.2.0"
 val ishtechSpringbootJwtauthVersion = "3.2.1"
+val ishtechValidationsVersion = "0.1.0-SNAPSHOT"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
 val springdocVersion = "3.0.3"
@@ -45,6 +46,7 @@ repositories {
 dependencies {
 	implementation("fi.ishtech.base:ishtech-base-jpa:${ishtechBaseJpaVersion}")
 	implementation("fi.ishtech.springboot:ishtech-springboot-jwtauth-api:${ishtechSpringbootJwtauthVersion}")
+	implementation("fi.ishtech.common:ishtech-validations:${ishtechValidationsVersion}")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
