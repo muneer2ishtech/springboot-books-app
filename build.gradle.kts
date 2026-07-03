@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "0.5.0"
+version = "0.6.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 // Centralized version declarations
