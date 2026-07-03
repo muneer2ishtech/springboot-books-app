@@ -267,9 +267,8 @@ public class BookRestControllerTest {
 		book.setYear(Short.valueOf("2999"));
 		book.setPrice(new BigDecimal("56.78"));
 
-		when(bookService.updateByIdAndMapToDto(eq(1L), any(BookDto.class))).thenThrow(
-				new ConstraintViolationException("updateByIdAndMapToDto.book.year: must not be greater than the current year",
-						Set.of()));
+		when(bookService.updateByIdAndMapToDto(eq(1L), any(BookDto.class))).thenThrow(new ConstraintViolationException(
+				"updateByIdAndMapToDto.book.year: must not be greater than the current year", Set.of()));
 
 		Gson gson = new Gson();
 		String requestJson = gson.toJson(book);
@@ -323,25 +322,25 @@ public class BookRestControllerTest {
 	public void testSearchBooksWithFilters() throws Exception {
 		BookDto book = new BookDto();
 		book.setId(1L);
-		book.setTitle("Dune");
-		book.setAuthor("Frank Herbert");
-		book.setYear(Short.valueOf("1965"));
-		book.setPrice(new BigDecimal("29.99"));
+		book.setTitle("Intro to Java");
+		book.setAuthor("Muneer");
+		book.setYear(Short.valueOf("2023"));
+		book.setPrice(new BigDecimal("12.34"));
 
 		when(bookService.findAllAndMapToVo(any(), any())).thenReturn(new PageImpl<>(List.of(book)));
 
 		// @formatter:off
 		mvc.perform(get("/api/v1/books")
-				.param("title", "Dune")
-				.param("author", "Frank Herbert")
-				.param("yearStart", "1960")
-				.param("yearEnd", "1980")
+				.param("title", "Intro to Java")
+				.param("author", "Muneer")
+				.param("yearStart", "2020")
+				.param("yearEnd", "2025")
 				.param("priceStart", "10.00")
 				.param("priceEnd", "50.00")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.content[0].title", is("Dune")))
-			.andExpect(jsonPath("$.content[0].author", is("Frank Herbert")));
+			.andExpect(jsonPath("$.content[0].title", is("Intro to Java")))
+			.andExpect(jsonPath("$.content[0].author", is("Muneer")));
 		// @formatter:on
 	}
 
