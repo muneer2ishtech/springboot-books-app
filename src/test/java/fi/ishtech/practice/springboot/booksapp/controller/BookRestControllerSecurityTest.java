@@ -10,14 +10,14 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import fi.ishtech.practice.springboot.booksapp.BookApplication;
+import fi.ishtech.practice.springboot.booksapp.BooksApplication;
 
 /**
  * Security tests for BookRestController — verifies 401 responses when no auth token is provided.
  *
  * @author Muneer Ahmed Syed
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = BookApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = BooksApplication.class)
 @AutoConfigureMockMvc
 public class BookRestControllerSecurityTest {
 

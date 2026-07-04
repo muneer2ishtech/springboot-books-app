@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.google.gson.Gson;
 
-import fi.ishtech.practice.springboot.booksapp.BookApplication;
+import fi.ishtech.practice.springboot.booksapp.BooksApplication;
 import fi.ishtech.practice.springboot.booksapp.dao.BookDao;
 import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import fi.ishtech.practice.springboot.booksapp.entity.Book;
@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Muneer Ahmed Syed
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = BookApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = BooksApplication.class)
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Slf4j
