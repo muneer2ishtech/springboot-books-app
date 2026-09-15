@@ -1,5 +1,5 @@
 # ====== Stage 1: Build ======
-FROM eclipse-temurin:25-jdk AS build
+FROM eclipse-temurin:17-jdk AS build
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN ./gradlew clean build -x test
 RUN find /app/build/libs/ -name "ishtech-springboot-books-app-*.jar" ! -name "*-plain.jar" -exec cp {} /app/ishtech-springboot-books-app.jar \;
 
 # ====== Stage 2: Runtime ======
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 

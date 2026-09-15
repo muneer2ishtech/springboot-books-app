@@ -5,15 +5,15 @@ plugins {
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "0.7.0-SNAPSHOT"
+version = "0.7.0-jdk17-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 base.archivesName.set("ishtech-springboot-books-app")
 
 // Centralized version declarations
-val ishtechBaseJpaVersion = "5.3.0-SNAPSHOT"
-val ishtechSpringbootJwtauthVersion = "3.3.0-SNAPSHOT"
-val ishtechValidationsVersion = "0.1.0-SNAPSHOT"
+val ishtechBaseJpaVersion = "5.3.0-jdk17-SNAPSHOT"
+val ishtechSpringbootJwtauthVersion = "3.3.0-jdk17-SNAPSHOT"
+val ishtechValidationsVersion = "0.1.0-jdk17-SNAPSHOT"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
 val springdocVersion = "3.0.3"
@@ -21,7 +21,7 @@ val hibernateVersion = "7.2.24.Final"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
