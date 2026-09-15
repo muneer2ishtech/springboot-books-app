@@ -2,7 +2,7 @@
 Books managing application using Spring Boot
 
 ## Tech stack
-- Java: 25
+- Java: 21
 - Spring Boot: 4.0.x
 - Database: PostgreSql:18
 - Database Migration: Flyway
