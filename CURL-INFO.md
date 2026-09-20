@@ -2,6 +2,10 @@
 
 - Check and use the correct port for the API calls.
 
+- All values in the requests below, whether in the URL or in the request body, are only examples.
+    - Change the ids in the URL, and the ids and other values in the request body, to the ones you want to test with.
+    - Any id used must be of a record that already exists, e.g. the book `id`.
+
 - For API names and descriptions:
     - See [API-INFO.md](./API-INFO.md)
 
