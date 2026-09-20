@@ -77,7 +77,7 @@ docker run \
     - You can prefix with env vars as in below example
     - Below args are optional, you can change to desired value or skip, if skipped they will use default value
         - `SPRING_PROFILES_ACTIVE` — Spring profile to activate, if skipped defaults to `dev`
-        - `DB_PORT` — port DB is exposed on the **host machine**, if skipped defaults to `5432`
+        - `DB_PORT_LOCAL` — port DB is exposed on the **host machine**, if skipped falls back to `DB_PORT`, and if that is also skipped defaults to `5432`
         - `SERVER_PORT_REMOTE` — port Spring Boot runs on **inside the container**, if skipped defaults to `8080`
         - `SERVER_PORT_LOCAL` — port the app is exposed on the **host machine**, if skipped defaults to `SERVER_PORT_REMOTE`
         - `APP_VERSION` — tag of the built image, as `muneer2ishtech/ishtech-springboot-books-app:$APP_VERSION`, if skipped the image is tagged `muneer2ishtech/ishtech-springboot-books-app:latest`
@@ -86,7 +86,7 @@ docker run \
 SPRING_PROFILES_ACTIVE=dev \
 SERVER_PORT_REMOTE=8080 \
 SERVER_PORT_LOCAL=8181 \
-DB_PORT=25432 \
+DB_PORT_LOCAL=25432 \
 APP_VERSION=$(./gradlew -q printVersion 2>/dev/null) \
 docker compose up --build
 
