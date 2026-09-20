@@ -80,6 +80,7 @@ docker run \
         - `DB_PORT` — port DB is exposed on the **host machine**, if skipped defaults to `5432`
         - `SERVER_PORT_REMOTE` — port Spring Boot runs on **inside the container**, if skipped defaults to `8080`
         - `SERVER_PORT_LOCAL` — port the app is exposed on the **host machine**, if skipped defaults to `SERVER_PORT_REMOTE`
+        - `APP_VERSION` — tag of the built image, as `muneer2ishtech/ishtech-springboot-books-app:$APP_VERSION`, if skipped the image is tagged `muneer2ishtech/ishtech-springboot-books-app:latest`
 
 ```
 SPRING_PROFILES_ACTIVE=dev \
