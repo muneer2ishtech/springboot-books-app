@@ -55,6 +55,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
