@@ -14,7 +14,7 @@ Books managing application using Spring Boot
 
 
 ## Design
-- [ishtech-jpa-base](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
+- [ishtech-base-jpa](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
 - [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentication & Authorization
 
 ### Some design considerations
