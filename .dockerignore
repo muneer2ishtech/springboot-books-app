@@ -58,6 +58,7 @@ out/
 .github
 
 ### Docker ###
+monitoring/
 
 ### Local ###
 .DS_Store

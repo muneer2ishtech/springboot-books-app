@@ -39,8 +39,57 @@ services:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       start_period: 45s
 
+  ishtech-springboot-books-prometheus:
+    image: prom/prometheus:v3.14.0
+    container_name: ishtech_springboot_books_prometheus
+    profiles: ["monitoring"]
+    # Fills the scrape target into the config template, then starts Prometheus
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        sed "s|__SCRAPE_TARGET__|${PROMETHEUS_SCRAPE_TARGET:-ishtech-springboot-books-app:${SERVER_PORT_REMOTE:-${SERVER_PORT:-8080}}}|"
+        /etc/prometheus/prometheus.yml.template > /tmp/prometheus.yml
+        && exec /bin/prometheus --config.file=/tmp/prometheus.yml --storage.tsdb.path=/prometheus
+    ports:
+      - "${PROMETHEUS_PORT_LOCAL:-9090}:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml.template:/etc/prometheus/prometheus.yml.template:ro
+      - ishtech_springboot_books_prometheus_data:/prometheus
+    networks:
+      - ishtech-springboot-books-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:9090/-/ready"]
+      start_period: 15s
+
+  ishtech-springboot-books-grafana:
+    image: grafana/grafana:13.2.2
+    container_name: ishtech_springboot_books_grafana
+    profiles: ["monitoring"]
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "${GRAFANA_PORT_LOCAL:-3001}:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards:ro
+      - ishtech_springboot_books_grafana_data:/var/lib/grafana
+    depends_on:
+      ishtech-springboot-books-prometheus:
+        condition: service_healthy
+    networks:
+      - ishtech-springboot-books-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/api/health"]
+      start_period: 30s
+
 volumes:
   ishtech_springboot_books_postgres_data:
+  ishtech_springboot_books_prometheus_data:
+  ishtech_springboot_books_grafana_data:
 
 networks:
   ishtech-springboot-books-network:
