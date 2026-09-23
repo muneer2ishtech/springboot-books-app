@@ -7,6 +7,7 @@ Books managing application using Spring Boot
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
+- Monitoring: Prometheus, Grafana
 
 ##
 
@@ -53,6 +54,10 @@ Table [t_user_role] contains physical column name [user_id] referred to by multi
 
 ## Database
 - See [DB-SETUP.md](./DB-SETUP.md) for setting up dev database
+
+
+## Monitoring
+- See [MONITORING.md](./MONITORING.md) for metrics with Prometheus and Grafana, and how to run and check them
 
 
 ## Known Issues

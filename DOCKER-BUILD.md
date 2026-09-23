@@ -67,11 +67,15 @@ docker run \
 
 - Docker compose is self contained and has both spring-boot application and db is present, so  you don't need anything else other than docker
 
+- Prometheus and Grafana are in the same compose file, under the compose profile `monitoring`, and start only when that profile is enabled; see [MONITORING.md](./MONITORING.md)
+
 - To stop if running
     - `docker compose stop`
+    - If you started it with `--profile monitoring`, add it here too: `docker compose --profile monitoring stop`
 
 - To stop and remove including volumes and built images
     - `docker compose down -v --rmi=local`
+    - If you started it with `--profile monitoring`, add it here too: `docker compose --profile monitoring down -v --rmi=local`
 
 - To build and start
     - You can prefix with env vars as in below example

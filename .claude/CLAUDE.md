@@ -18,6 +18,7 @@ The docs are the source of truth. Don't guess commands: open the matching file a
 | run test Level 1 (build with tests) | `README.md`, section "Build and Run", subsection "Local Gradle Build" |
 | run test Level 2 (run the app with Gradle) | `README.md`, section "Build and Run", subsection "Local Gradle Run". The app needs its database set up first: `DB-SETUP.md`, section "Local" |
 | run test Level 3 (run with Docker compose) | `DOCKER-BUILD.md`, section "Run with docker compose" |
+| run or check Prometheus and Grafana (optional, not part of any test level unless the owner asks) | `MONITORING.md` |
 | run the API tests (part of Levels 2 and 3) | `CURL-INFO.md` (every flow; the auth flows are in the ishtech-springboot-jwtauth doc linked under "Auth APIs"); endpoint list in `API-INFO.md` |
 | touch the database for any other reason | `DB-SETUP.md` |
 | change the version or anything release-related, or check what CI enforces | `.github/workflows/cicd.yml` |
