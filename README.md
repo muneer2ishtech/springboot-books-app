@@ -2,11 +2,21 @@
 Books managing application using Spring Boot
 
 ## Tech stack
-- Java: 25
+
+- JDK 25 (default)
+- Other supported JDK versions:
+  - JDK 21
+  - JDK 17
 - Spring Boot: 4.0.x
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
+
+### Application version for each JDK version
+
+- Releases for the default JDK version have plain version numbers, for example `x.y.z`. They are built from the branches `dev` and `main`.
+- Releases for another supported JDK version have the same version number with the suffix `-jdkNN`, for example `x.y.z-jdk21` for JDK 21. They are built from the branch `dev-jdkNN`, for example `dev-jdk21`, from the same code, adapted where that JDK version needs it.
+- Each release is published as the Docker image `muneer2ishtech/ishtech-springboot-books-app` on Docker Hub, tagged with the version, for example `x.y.z` or `x.y.z-jdk21`.
 
 ##
 
