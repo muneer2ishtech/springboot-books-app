@@ -3,14 +3,16 @@
 
 - `dev` and feature branches use a SNAPSHOT version (`x.y.z-SNAPSHOT`; a feature branch may add a qualifier, e.g. `x.y.z-topic-SNAPSHOT`). `main` uses a release version without SNAPSHOT.
 - A version bump is its own commit.
+- The build file is `pom.xml` for Maven and `build.gradle.kts` for Gradle; in the commit messages in this file, a Gradle repo uses the area `gradle` instead of `pom`. In a Maven multi-module project, the project version is in the root `pom.xml` and in the parent reference of every module's `pom.xml`; change them all in the same commit. Wherever this file names `pom.xml` or `java.version`, a Gradle repo uses `build.gradle.kts` and its Java toolchain `languageVersion`.
 - Library repos (published to Maven Central; see the repo's README, section "Publish to Maven Central") have consumers you cannot know. Treat public classes, configuration properties and behaviour as a contract: a breaking change needs a major version bump and the owner's approval.
+- Application repos (runnable applications) are released as Docker images on Docker Hub; the image names and tags are in the repo's `.github/workflows/cicd.yml`. A repo that is both a library and an application releases its libraries to Maven Central and its application as a Docker image, all with the same version.
 - Never publish anything unless the owner explicitly asks for that specific publish: no `deploy`, no `-P central-publishing` or `-P gpg`, no Docker image push, no release or tag.
 
 ## Readiness for the owner's pull request from `dev` to `main`
 When the owner asks whether `dev` is ready, run every check below and report each result:
 1. The release criteria are met (section "Release criteria").
 2. Test Level 1 passes (`build-and-test.md`).
-3. Test Levels 2 and 3 pass, for repos that have them (`build-and-test.md`).
+3. Test Levels 2 and 3 pass, for repos that have them (`build-and-test.md`). Level 3 is required. If Level 2 fails or can't be run (for example, in a cloud session without the database it needs) but Level 3 passes, report that and let the owner decide whether to go on with the release or investigate first.
 4. Dependent tests pass against the repo's default dependent, for repos that other repos depend on. Report whether they were done and each result, as `build-and-test.md`, section "Dependent tests", describes.
 
 ## Pull request from `dev` to `main`
@@ -28,16 +30,16 @@ Fetch `main` and `dev` first. Work from the actual changes, not from the commit 
 A file that is the same on `main` and `dev` has no changes to report, even if commits on `dev` touched it.
 
 ### Title
-`Dev to main - x.y.z`, where `x.y.z` is the version in `pom.xml` on `dev` without `-SNAPSHOT` (for example `5.3.0-SNAPSHOT` gives `Dev to main - 5.3.0`).
+`Dev to main - x.y.z`, where `x.y.z` is the version in the build file on `dev` without `-SNAPSHOT` (for example `5.3.0-SNAPSHOT` gives `Dev to main - 5.3.0`).
 
 ### Notes
 Content:
-- High level: one line for each change that matters to someone who uses or maintains the library, grouped by area, with sub-bullets for details. Not one line per commit or per file.
+- High level: one line for each change that matters to someone who uses or maintains the library or application, grouped by area, with sub-bullets for details. Not one line per commit or per file.
 - Complete and accurate: every change that matters is listed, and nothing is listed that isn't in the diff.
 - The first line is `POM version x.y.z`, the same version as in the title. Its sub-bullets list dependency and plugin version updates, using the new version only (`<dependency or plugin> version <new version>`). An upstream library of the owner is listed the same way, with its version without `-SNAPSHOT`.
 - State every breaking change explicitly, because consumers can't find out about it any other way. For example: a changed `groupId` or `artifactId`, renamed packages or classes, and renamed validation message keys or configuration properties. A package refactor doesn't imply a `groupId` change, so name both (`package and groupId refactor from <old> to <new>`, or separate old and new values when the package and the `groupId` differ). A breaking change also needs a major version bump (see the top of this file); if the version isn't one, point that out to the owner.
 - For a first release, where `main` has only a skeleton (for example an empty README), use `initial code` with a short phrase saying what the code provides, and `readme - initial documentation`.
-- Leave out changes that matter to nobody who uses or maintains the library, such as reformatting code.
+- Leave out changes that matter to nobody who uses or maintains the library or application, such as reformatting code.
 
 Style:
 - Follow the style of earlier notes, not a fixed template: the areas and lines depend on what actually changed. Read the descriptions of the most recent pull requests from `dev` to `main` in this repo (open and merged), newest first. The newer a note is, the more weight it has: older notes may predate this section. If this repo has none yet (a first release), use the most recent ones of the owner's sibling libraries (`repositories.md`).
@@ -52,20 +54,20 @@ Style:
 - Don't add reviewers, labels or auto-merge, and never merge it.
 
 ### Keeping the pull request up to date
-Check the title and notes against `dev`, as described above, only when the owner asks, and before a release (for example after the release version is set in `pom.xml`). Propose the corrections to the owner as described at the start of this section.
+Check the title and notes against `dev`, as described above, only when the owner asks, and before a release (for example after the release version is set in the build file). Propose the corrections to the owner as described at the start of this section.
 
 ## Release criteria
-Before `dev` is merged into `main`, `pom.xml` on `dev` must meet all of these:
+Before `dev` is merged into `main`, the build file on `dev` must meet all of these:
 1. The project version has no `-SNAPSHOT`.
 2. Every dependency on one of the owner's libraries (`groupId` starting with `fi.ishtech`) has a release version, not a SNAPSHOT version.
 3. Each of those release versions is on Maven Central: `https://repo1.maven.org/maven2/<groupId, with each dot replaced by a slash>/<artifactId>/maven-metadata.xml` lists it.
 
-So a library is released only after the owner's libraries it depends on are released. Release one repo at a time, upstream first (`repositories.md`, section "Order of work across repos").
+So a library or application is released only after the owner's libraries it depends on are released. Release one repo at a time, upstream first (`repositories.md`, section "Order of work across repos").
 
 ## Release
 The owner decides when to release and which version. Claude does each step below only when the owner asks. Only the owner merges `dev` into `main` and publishes the GitHub release (`git-and-branches.md`, section "Merges").
 
-The version commits below (steps 1, 2 and 8) go directly on `dev`. `git-and-branches.md` allows that only when the owner says so, so ask the owner each time, giving the reason: it is a one-line version change in `pom.xml`, which in steps 1 and 2 must be among the last commits on `dev` before the merge into `main`.
+The version commits below (steps 1, 2 and 8) go directly on `dev`. `git-and-branches.md` allows that only when the owner says so, so ask the owner each time, giving the reason: it is only a version change in the build file, which in steps 1 and 2 must be among the last commits on `dev` before the merge into `main`.
 
 ### Version
 The owner decides the version. At the start of the preparation, recommend one, with the reasons, based on the changes from `main` to `dev`:
@@ -79,15 +81,17 @@ If the recommended version differs from the version in `pom.xml` on `dev` (witho
 1. In `pom.xml` on `dev`, set each dependency on the owner's libraries to its release version. Commit `pom - <artifactId> x.y.z`, one commit per dependency.
 2. In `pom.xml` on `dev`, set the project version to the release version, without `-SNAPSHOT`. Commit `pom - x.y.z release version`.
 3. Check the CI runs on `dev` (GitHub Actions):
-   - The run for the commit `pom - x.y.z release version` is expected to fail, only in the step "Validate Project Version", with the error that a branch other than `main` must use a SNAPSHOT version. That confirms the version check works.
+   - The run for the commit `pom - x.y.z release version` is expected to fail, only in the step "Validate Project Version", with the error that a branch other than `main` must use a SNAPSHOT version. That confirms the version check works. If the repo's CI doesn't check this, say so.
    - Every other run on `dev` since the previous release must have succeeded, or have been followed by a successful run.
    - Report any other failure to the owner, with the failing step and its error, and wait for the owner to decide whether to go on with the release.
 4. Run the readiness check (section "Readiness for the owner's pull request from `dev` to `main`").
 5. Update the title and notes of the pull request from `dev` to `main` (section "Pull request from `dev` to `main`").
-6. The owner merges the pull request and publishes a GitHub release with the tag `vx.y.z`. CI then publishes the release to Maven Central.
+6. The owner merges the pull request and publishes a GitHub release with the tag `vx.y.z`. CI then publishes the release: a library to Maven Central, an application as a Docker image to Docker Hub, and a repo that is both to both.
 
 ### Verification
-7. Check that the CI run for the GitHub release succeeded, and that version `x.y.z` is on Maven Central (the URL is in section "Release criteria", criterion 3).
+7. Check that the CI run for the GitHub release succeeded, and that the release is published:
+   - Library: version `x.y.z` is on Maven Central (the URL is in section "Release criteria", criterion 3).
+   - Application: every Docker image tag that `.github/workflows/cicd.yml` pushes for version `x.y.z` (the tag is the version, sometimes with a further suffix, for example one image per database) is on Docker Hub: `https://hub.docker.com/v2/repositories/<namespace>/<image>/tags/<tag>` returns HTTP 200.
 
 ### After the release
 8. In `pom.xml` on `dev`, set the next minor SNAPSHOT version (for example `5.3.0-SNAPSHOT` after `5.2.0`), unless the owner gives another. Commit `pom - x.y.z snapshot version`.
@@ -95,7 +99,7 @@ If the recommended version differs from the version in `pom.xml` on `dev` (witho
 ## JDK variants
 `dev` and `main` use the default JDK version, the latest LTS version (`java.version` in `pom.xml`), and their code and dependencies are kept at the latest available versions. They never keep older code or older dependency versions only to stay compatible with an earlier JDK.
 
-A library can also be released for other supported JDK versions. The README, section "Tech stack", lists the default JDK version and the other supported JDK versions; each other supported JDK version has a branch `dev-jdkNN` in the repo. If that list doesn't match `java.version` in `pom.xml` on `dev`, or doesn't match the branches (`git ls-remote --heads origin 'dev-jdk*'`), tell the owner. When the owner adds or drops a supported JDK version, update that list in the same task. In this section, `NN` stands for such a JDK version (for example `21`). Names always use `jdkNN`, lowercase, without a hyphen between `jdk` and the number; text uses "JDK NN".
+A library or application can also be released for other supported JDK versions. The README, section "Tech stack", lists the default JDK version and the other supported JDK versions; each other supported JDK version has a branch `dev-jdkNN` in the repo. If that list doesn't match `java.version` in `pom.xml` on `dev`, or doesn't match the branches (`git ls-remote --heads origin 'dev-jdk*'`), tell the owner. When the owner adds or drops a supported JDK version, update that list in the same task. In this section, `NN` stands for such a JDK version (for example `21`). Names always use `jdkNN`, lowercase, without a hyphen between `jdk` and the number; text uses "JDK NN".
 
 Each branch `dev-jdkNN`:
 - Is never merged into `dev` or `main`.
@@ -120,8 +124,8 @@ Only after the release `x.y.z` has passed "Verification" (section "Release", ste
 3. In `pom.xml` on `dev-jdkNN`, set the project version to `x.y.z-jdkNN`. Commit `pom - x.y.z-jdkNN release version`.
 4. Run the readiness check (section "Readiness for the owner's pull request from `dev` to `main`") on `dev-jdkNN`, with JDK NN. Release criteria 2 and 3 apply with the suffix: each dependency on the owner's libraries has a release version with the suffix `-jdkNN`, and that version is on Maven Central.
 5. Check the CI runs on `dev-jdkNN`, as in section "Release", step 3.
-6. The owner publishes a GitHub release with the tag `vx.y.z-jdkNN` on the latest commit of `dev-jdkNN`, with "Set as the latest release" unticked. CI then publishes the release to Maven Central.
-7. Check that the CI run for the GitHub release succeeded, and that version `x.y.z-jdkNN` is on Maven Central.
+6. The owner publishes a GitHub release with the tag `vx.y.z-jdkNN` on the latest commit of `dev-jdkNN`, with "Set as the latest release" unticked. CI then publishes the release, as in section "Release", step 6.
+7. Check that the CI run for the GitHub release succeeded, and that version `x.y.z-jdkNN` is published, as in section "Release", step 7.
 8. In `pom.xml` on `dev-jdkNN`, set the next SNAPSHOT version with the same number as on `dev` (for example `6.1.0-jdk21-SNAPSHOT` when `dev` has `6.1.0-SNAPSHOT`). Commit `pom - x.y.z-jdkNN snapshot version`.
 
 ## Publishing upstream SNAPSHOTs before Level 3
