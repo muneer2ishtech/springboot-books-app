@@ -16,6 +16,7 @@ The docs are the source of truth. Don't guess commands: open the matching file a
 |---|---|
 | work out what the application is and its tech stack | `README.md`, the introduction and sections "Tech stack" and "Design" |
 | run test Level 1 (build with tests) | `README.md`, section "Build and Run", subsection "Local Gradle Build" |
+| check the default JDK version or the other supported JDK versions | `README.md`, section "Tech stack"; for the `dev-jdkNN` branches and their releases, `rules/versions-and-releases.md`, section "JDK variants" |
 | run test Level 2 (run the app with Gradle) | `README.md`, section "Build and Run", subsection "Local Gradle Run". The app needs its database set up first: `DB-SETUP.md`, section "Local" |
 | run test Level 3 (run with Docker compose) | `DOCKER-BUILD.md`, section "Run with docker compose" |
 | run the API tests (part of Levels 2 and 3) | `CURL-INFO.md` (every flow; the auth flows are in the ishtech-springboot-jwtauth doc linked under "Auth APIs"); endpoint list in `API-INFO.md` |
