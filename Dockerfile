@@ -14,6 +14,11 @@ RUN find /app/build/libs/ -name "ishtech-springboot-books-app-*.jar" ! -name "*-
 # ====== Stage 2: Runtime ======
 FROM eclipse-temurin:21-jre
 
+# Install curl, needed by the docker compose healthcheck
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY --from=build /app/ishtech-springboot-books-app.jar ishtech-springboot-books-app.jar
