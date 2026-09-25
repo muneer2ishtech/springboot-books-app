@@ -228,7 +228,7 @@ curl --request PUT --location 'http://localhost:8080/api/v1/books/1' \
 ### Response Details
 - HTTP Response Code: `410 - Gone`
     - Book deleted successfully
-- HTTP Response Code: `404 - Not Found`
+    - Also returned if the book does not exist, as delete is idempotent
 - HTTP Response Code: `401 - Unauthorized`
 
 ### Request JSON
