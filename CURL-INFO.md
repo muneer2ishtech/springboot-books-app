@@ -254,6 +254,13 @@ curl --request DELETE --location 'http://localhost:8080/api/v1/books/1' \
 
 ### Prerequisites
 - Ensure `t_dummy` exists with test data as in `src/test/resources/db/postgres/create_table_dummy.sql` every time before test
+    - Run the contents of this SQL file from the SQL prompt (see [DB-SETUP.md](./DB-SETUP.md#db-access)), or, if the DB runs with docker compose, run below
+    - The file can be run again before each test: it creates the table only if it does not exist, and resets its test data
+
+```
+docker exec -i ishtech_springboot_books_postgres psql -U ishtech_dev_user -d ishtech_dev_db < src/test/resources/db/postgres/create_table_dummy.sql
+```
+
 - Note: change `title` in request body if repeating the test (unique constraint on `title` + `author`)
 
 ### Request Details
@@ -306,6 +313,13 @@ curl --request POST --location 'http://localhost:8080/api/v1/books/with-prep-stm
 
 ### Prerequisites
 - Ensure `t_dummy` exists with test data as in `src/test/resources/db/postgres/create_table_dummy.sql` every time before test
+    - Run the contents of this SQL file from the SQL prompt (see [DB-SETUP.md](./DB-SETUP.md#db-access)), or, if the DB runs with docker compose, run below
+    - The file can be run again before each test: it creates the table only if it does not exist, and resets its test data
+
+```
+docker exec -i ishtech_springboot_books_postgres psql -U ishtech_dev_user -d ishtech_dev_db < src/test/resources/db/postgres/create_table_dummy.sql
+```
+
 - Note: change `title` in request body if repeating the test (unique constraint on `title` + `author`)
 
 ### Request Details
