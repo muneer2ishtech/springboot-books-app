@@ -51,7 +51,7 @@ cd "$TMP/work"
 PASSED=0
 FAILED=0
 
-# run <case> <expected: DEPLOY|BUILD|FAIL> <event> <ref type> <ref name> <commit> <pom version> [manual_deploy] [release tag] [successful release runs]
+# run <case> <expected: DEPLOY|BUILD|FAIL> <event> <ref type> <ref name> <commit> <project version> [manual_deploy] [release tag] [successful release runs]
 run() {
   local name=$1 expected=$2 out result
   printf '#!/bin/bash\necho %s\n' "$7" > gradlew
@@ -72,7 +72,7 @@ run() {
 M=origin/main
 echo "--- GitHub release: vx.y.z on main only"
 run "release v1.0.0 on main"             DEPLOY release tag v1.0.0       v1.0.0       1.0.0                "" v1.0.0
-run "release, tag does not match pom"    FAIL   release tag v1.0.0       v1.0.0       1.0.1                "" v1.0.0
+run "release, tag not matching project"  FAIL   release tag v1.0.0       v1.0.0       1.0.1                "" v1.0.0
 run "release from a branch, not main"    FAIL   release tag v9.9.9       v9.9.9       9.9.9                "" v9.9.9
 run "release, SNAPSHOT version"          FAIL   release tag v1.0.0       v1.0.0       1.0.0-SNAPSHOT       "" v1.0.0
 run "release with a jdk tag"             FAIL   release tag v1.0.0-jdk21 v1.0.0-jdk21 1.0.0-jdk21          "" v1.0.0-jdk21
@@ -83,7 +83,7 @@ run "tag, release v1.0.0 run not green"  FAIL   push tag v1.0.0-jdk21  v1.0.0-jd
 run "tag jdk17 on dev-jdk21 commit"      FAIL   push tag v1.0.0-jdk17  v1.0.0-jdk21 1.0.0-jdk17          "" "" 1
 run "tag, release tag v1.2.0 missing"    FAIL   push tag v1.2.0-jdk21  v1.0.0-jdk21 1.2.0-jdk21          "" "" 1
 run "tag, release v1.1.0 not merged"     FAIL   push tag v1.1.0-jdk21  v1.0.0-jdk21 1.1.0-jdk21          "" "" 1
-run "tag does not match pom"             FAIL   push tag v1.0.1-jdk21  v1.0.0-jdk21 1.0.0-jdk21          "" "" 1
+run "tag does not match project"         FAIL   push tag v1.0.1-jdk21  v1.0.0-jdk21 1.0.0-jdk21          "" "" 1
 run "tag, SNAPSHOT version"              FAIL   push tag v1.0.0-jdk21  v1.0.0-jdk21 1.0.0-jdk21-SNAPSHOT "" "" 1
 run "tag v1.1.0-jdk21x (bad suffix)"     FAIL   push tag v1.1.0-jdk21x v1.1.0-jdk21x 1.1.0-jdk21x        "" "" 1
 

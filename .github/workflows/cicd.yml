@@ -1,5 +1,5 @@
-# Build, test a Maven project and release as Docker image.
-## see: https://docs.github.com/en/actions/tutorials/build-and-test-code/java-with-maven
+# Build, test a Gradle project and release as Docker image.
+## see: https://docs.github.com/en/actions/tutorials/build-and-test-code/java-with-gradle
 ## see: https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images
 #
 # Deploy rules (Docker image to Docker Hub):
@@ -75,7 +75,7 @@ jobs:
               fail "Release version must be x.y.z. Found: $APP_VERSION"
             fi
             if [[ "$RELEASE_TAG" != "v$APP_VERSION" ]]; then
-              fail "Tag ($RELEASE_TAG) does NOT match pom version (v$APP_VERSION)"
+              fail "Tag ($RELEASE_TAG) does NOT match project version (v$APP_VERSION)"
             fi
             if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
               fail "Release tag $RELEASE_TAG is not on main. GitHub releases are only for main."
@@ -91,12 +91,12 @@ jobs:
           # ---------- TAG PUSH: vx.y.z-jdkMN on dev-jdkMN only ----------
           elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             if ! [[ "$APP_VERSION" =~ $JDK_RELEASE_RE ]]; then
-              fail "Tag deploy needs pom version x.y.z-jdkMN. Found: $APP_VERSION"
+              fail "Tag deploy needs project version x.y.z-jdkMN. Found: $APP_VERSION"
             fi
             BASE_VERSION="${BASH_REMATCH[1]}"
             JDK="${BASH_REMATCH[2]}"
             if [[ "$GITHUB_REF_NAME" != "v$APP_VERSION" ]]; then
-              fail "Tag ($GITHUB_REF_NAME) does NOT match pom version (v$APP_VERSION)"
+              fail "Tag ($GITHUB_REF_NAME) does NOT match project version (v$APP_VERSION)"
             fi
             if ! git rev-parse -q --verify "refs/remotes/origin/dev-jdk$JDK" >/dev/null; then
               fail "Branch dev-jdk$JDK does not exist"
