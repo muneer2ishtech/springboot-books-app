@@ -162,9 +162,12 @@ jobs:
           echo "✔ Validation passed (do_release=$DO_RELEASE)"
           echo "do_release=$DO_RELEASE" >> "$GITHUB_OUTPUT"
 
+          # For release builds resolve dependencies fresh
+          [[ "$DO_RELEASE" == "true" ]] && echo "gradle_dep_opts=--refresh-dependencies" >> "$GITHUB_OUTPUT" || true
+
       # 2. Compile
       - name: Gradle Compile
-        run: ./gradlew clean build -x test
+        run: ./gradlew ${{ steps.validate-project-version.outputs.gradle_dep_opts }} clean build -x test
 
       # 3. Test
       - name: Gradle Test
