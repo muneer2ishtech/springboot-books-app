@@ -45,11 +45,12 @@ jobs:
         with:
           fetch-depth: 0 # full history and tags, to check which branch a tag is on
 
-      - name: Set up JDK 25
+      - name: Set up JDK + Gradle cache
         uses: actions/setup-java@v6
         with:
           java-version: '25'
           distribution: 'temurin'
+          cache: 'gradle'
 
       # 1. Validate version against branch / release tag
       - name: Validate Project Version
