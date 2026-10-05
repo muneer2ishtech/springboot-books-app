@@ -9,11 +9,6 @@
 # - Manual run with manual_deploy=true, on any branch except main -> SNAPSHOT
 #   (dev: x.y.z-SNAPSHOT, dev-jdkMN: x.y.z-jdkMN-SNAPSHOT,
 #    other branches: x.y.z-<qualifier>-SNAPSHOT, qualifier not ending in jdkNN)
-#
-# Dependency cache (Gradle dependencies, cached by the Set up JDK step):
-# - dev, dev-jdkMN and feature branches                           -> cached
-# - main, a release event or a tag push                           -> not cached
-# - a run with manual_deploy=true                                 -> not cached
 
 name: Java CI with Gradle and Docker
 
@@ -55,7 +50,7 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-          cache: ${{ (github.event_name != 'release' && github.ref_type != 'tag' && github.ref != 'refs/heads/main' && inputs.manual_deploy != 'true') && 'gradle' || '' }}
+          cache: 'gradle'
 
       # 1. Validate version against branch / release tag
       - name: Validate Project Version
