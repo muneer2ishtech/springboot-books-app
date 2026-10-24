@@ -17,7 +17,7 @@ val ishtechValidationsVersion = "1.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
 val springdocVersion = "3.2.0"
-val hibernateVersion = "7.2.24.Final"
+val hibernateVersion = "7.4.13.Final"
 
 java {
 	toolchain {
