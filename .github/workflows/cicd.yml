@@ -45,7 +45,7 @@ jobs:
         with:
           fetch-depth: 0 # full history and tags, to check which branch a tag is on
 
-      - name: Set up JDK + Gradle cache
+      - name: Set up JDK 25 + Gradle cache
         uses: actions/setup-java@v6
         with:
           java-version: '25'
