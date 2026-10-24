@@ -61,7 +61,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-database-postgresql")
 
 	implementation("org.hibernate.orm:hibernate-envers")
-	annotationProcessor("org.hibernate:hibernate-jpamodelgen:${hibernateVersion}")
+	annotationProcessor("org.hibernate.orm:hibernate-processor:${hibernateVersion}")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
