@@ -7,7 +7,7 @@ Books managing application using Spring Boot
 - Other supported JDK versions:
   - JDK 21
   - JDK 17
-- Spring Boot: 4.0.x
+- Spring Boot: 4.1.x
 - Database: PostgreSql:18
 - Database Migration: Flyway
 - Containerization: Docker
