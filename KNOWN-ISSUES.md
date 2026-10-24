@@ -58,3 +58,9 @@ The branch rule (block "PUSH / BRANCH RULE" in the other applications' workflows
 ### Suggested fix
 
 Add the branch rule from `springboot-multi-db/.github/workflows/cicd.yml`, including the check that `main` can't be released by a manual deploy. Then verify it with a push of a release version to a feature branch, and with a push of a SNAPSHOT version on `dev`.
+
+---
+
+## 3. `PUT /api/v1/users/{userId}` clears fields absent from the request body
+
+See ishtech-springboot-jwtauth [`KNOWN-ISSUES.md`, issue 1](https://github.com/IshTech/ishtech-springboot-jwtauth/blob/dev/KNOWN-ISSUES.md).

@@ -45,11 +45,12 @@ jobs:
         with:
           fetch-depth: 0 # full history and tags, to check which branch a tag is on
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 + Gradle cache
         uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle'
 
       # 1. Validate version against branch / release tag
       - name: Validate Project Version
@@ -161,9 +162,12 @@ jobs:
           echo "✔ Validation passed (do_release=$DO_RELEASE)"
           echo "do_release=$DO_RELEASE" >> "$GITHUB_OUTPUT"
 
+          # For release builds resolve dependencies fresh
+          [[ "$DO_RELEASE" == "true" ]] && echo "gradle_dep_opts=--refresh-dependencies" >> "$GITHUB_OUTPUT" || true
+
       # 2. Compile
       - name: Gradle Compile
-        run: ./gradlew clean build -x test
+        run: ./gradlew ${{ steps.validate-project-version.outputs.gradle_dep_opts }} clean build -x test
 
       # 3. Test
       - name: Gradle Test
