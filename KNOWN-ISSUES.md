@@ -64,3 +64,55 @@ Add the branch rule from `springboot-multi-db/.github/workflows/cicd.yml`, inclu
 ## 3. `PUT /api/v1/users/{userId}` clears fields absent from the request body
 
 See ishtech-springboot-jwtauth [`KNOWN-ISSUES.md`, issue 1](https://github.com/IshTech/ishtech-springboot-jwtauth/blob/dev/KNOWN-ISSUES.md).
+
+---
+
+## 4. Creating a duplicate book returns `500` and leaks internal SQL, instead of `400`
+
+**Status:** Open
+**Impact:** Medium — a client that creates a book with an existing `title` and `author` gets `500 - Internal Server Error` instead of the intended `400 - Bad Request`, and the response body exposes the PostgreSQL error, the SQL statement, the table, schema and constraint names, and the duplicate values.
+**Affects:** `POST /api/v1/books` with PostgreSQL, the database of the `dev` profile and of docker compose. `CustomExceptionHandler.handleDataIntegrityViolationException`.
+
+### Description
+
+`CustomExceptionHandler.handleDataIntegrityViolationException` returns `400` with the message `Book title and author combination already exists` only when the exception message contains both `Unique index or primary key violation` and `uk_book_title_author`:
+
+```java
+if (Strings.CI.contains(ex.getMessage(), "Unique index or primary key violation")
+		&& Strings.CI.contains(ex.getMessage(), "uk_book_title_author")) {
+	return ResponseEntity.badRequest().body("Book title and author combination already exists");
+}
+
+return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+```
+
+`Unique index or primary key violation` is H2's wording. PostgreSQL reports `duplicate key value violates unique constraint "uk_book_title_author"`, so the first condition is never true, and the request falls through to the last line, which returns `500` with `ex.getMessage()` as the response body.
+
+The unit test `BookRestControllerTest.testCreateNewBookFailForNonUniqueTitle` passes, because it mocks the exception with the H2 wording.
+
+### Steps to reproduce
+
+Using the `dev` profile (`DB-SETUP.md`) or docker compose (`DOCKER-BUILD.md`), signed in as any user:
+
+1. Create a book: `POST /api/v1/books` with `{"title": "Dune II", "author": "Frank Herbert", "year": 1970, "price": 29.99}`. Expected and actual: `201`.
+2. Send the same request again.
+
+Expected: `400 - Bad Request` with the body `Book title and author combination already exists`.
+Actual: `500 - Internal Server Error` with a body like:
+
+```
+could not execute statement [ERROR: duplicate key value violates unique constraint "uk_book_title_author"
+  Detail: Key (title, author)=(Dune II, Frank Herbert) already exists.] [insert into booksapp_dev_schema.t_book (author,description,is_active,price,title,year) values (?,?,?,?,?,?)]; SQL [insert into booksapp_dev_schema.t_book (author,description,is_active,price,title,year) values (?,?,?,?,?,?)]; constraint [uk_book_title_author]
+```
+
+### Likely cause
+
+The handler matches the database-specific text of the exception message, which was written for H2 and doesn't match PostgreSQL. The `else` branch returns the raw exception message to the client.
+
+### Suggested fix
+
+1. Detect the violated constraint without relying on the database's wording, for example from the `ConstraintViolationException` cause (`getConstraintName()` is `uk_book_title_author`), or at least by matching the constraint name alone.
+2. Don't return `ex.getMessage()` to the client: return a generic message for every other integrity violation, and keep the details in the log.
+3. Change the unit test to use a realistic exception, and add a test that checks the response body contains no SQL or constraint names.
+
+springboot-oms has a similar handler problem (its `KNOWN-ISSUES.md`, issue 1), with a different cause.
