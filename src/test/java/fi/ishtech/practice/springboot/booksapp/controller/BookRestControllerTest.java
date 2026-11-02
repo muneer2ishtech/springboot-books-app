@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,9 +22,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
-
-import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -339,9 +338,6 @@ public class BookRestControllerTest {
 		book.setYear(Short.valueOf("2999"));
 		book.setPrice(new BigDecimal("56.78"));
 
-		when(bookService.updateByIdAndMapToDto(eq(1L), any(BookDto.class))).thenThrow(new ConstraintViolationException(
-				"updateByIdAndMapToDto.book.year: must not be greater than the current year", Set.of()));
-
 		Gson gson = new Gson();
 		String requestJson = gson.toJson(book);
 
@@ -351,6 +347,8 @@ public class BookRestControllerTest {
 				.content(requestJson))
 			.andExpect(status().isBadRequest());
 		// @formatter:on
+
+		verify(bookService, never()).updateByIdAndMapToDto(any(), any());
 	}
 
 	@Test
