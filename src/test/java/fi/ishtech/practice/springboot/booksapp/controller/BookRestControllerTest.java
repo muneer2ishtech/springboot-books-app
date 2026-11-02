@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -176,8 +178,8 @@ public class BookRestControllerTest {
 		book.setYear(Short.valueOf("2023"));
 		book.setPrice(new BigDecimal("12.34"));
 
-		when(bookService.createAndMapToDto(any(BookDto.class))).thenThrow(
-				new DataIntegrityViolationException("Unique index or primary key violation: uk_book_title_author"));
+		when(bookService.createAndMapToDto(any(BookDto.class)))
+				.thenThrow(newPostgresDataIntegrityViolationException("uk_book_title_author"));
 
 		Gson gson = new Gson();
 		String requestJson = gson.toJson(book);
@@ -186,8 +188,24 @@ public class BookRestControllerTest {
  		mvc.perform(post("/api/v1/books")
  				.contentType(MediaType.APPLICATION_JSON)
  				.content(requestJson))
- 			.andExpect(status().isBadRequest());
+ 			.andExpect(status().isBadRequest())
+ 			.andExpect(content().string("Book title and author combination already exists"));
 		// @formatter:on
+	}
+
+	/**
+	 * Builds the exception as Spring translates Hibernate's exception for a PostgreSQL unique constraint violation.
+	 */
+	private DataIntegrityViolationException newPostgresDataIntegrityViolationException(String constraintName) {
+		String sql = "insert into booksapp_dev_schema.t_book (author,description,is_active,price,title,year) values (?,?,?,?,?,?)";
+		String pgMessage = "ERROR: duplicate key value violates unique constraint \"" + constraintName + "\"\n"
+				+ "  Detail: Key (title, author)=(Intro to Java, Muneer) already exists.";
+		String message = "could not execute statement [" + pgMessage + "] [" + sql + "]; SQL [" + sql + "]; constraint ["
+				+ constraintName + "]";
+
+		return new DataIntegrityViolationException(message, new org.hibernate.exception.ConstraintViolationException(
+				"could not execute statement [" + pgMessage + "] [" + sql + "]", new SQLException(pgMessage, "23505"),
+				sql, constraintName));
 	}
 
 	@Test
