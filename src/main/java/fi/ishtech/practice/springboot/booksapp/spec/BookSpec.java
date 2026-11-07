@@ -7,7 +7,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import fi.ishtech.base.spec.BaseStandardSpec;
+import fi.ishtech.springboot.base.spec.BaseStandardSpec;
 import fi.ishtech.practice.springboot.booksapp.dto.BookFilterParams;
 import fi.ishtech.practice.springboot.booksapp.entity.Book;
 import fi.ishtech.practice.springboot.booksapp.entity.Book_;
