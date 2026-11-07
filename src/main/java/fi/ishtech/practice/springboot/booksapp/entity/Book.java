@@ -3,7 +3,7 @@ package fi.ishtech.practice.springboot.booksapp.entity;
 import java.io.Serial;
 import java.math.BigDecimal;
 
-import fi.ishtech.base.entity.BaseStandardEntity;
+import fi.ishtech.springboot.base.entity.BaseStandardEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

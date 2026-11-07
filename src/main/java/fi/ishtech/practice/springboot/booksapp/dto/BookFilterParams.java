@@ -3,7 +3,7 @@ package fi.ishtech.practice.springboot.booksapp.dto;
 import java.io.Serial;
 import java.math.BigDecimal;
 
-import fi.ishtech.base.payload.filter.BaseStandardEntityFilterParams;
+import fi.ishtech.springboot.base.payload.filter.BaseStandardEntityFilterParams;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

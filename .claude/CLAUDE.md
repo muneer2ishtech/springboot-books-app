@@ -7,7 +7,7 @@ The owner's standing instructions are in `.claude/rules/` (`owner-workflow.md`, 
 - It's a runnable Spring Boot application, so it has test Levels 1, 2 and 3.
 - It's built with Gradle (`build.gradle.kts`); use `./gradlew`.
 - Nothing depends on `springboot-books-app`, so dependent tests (`rules/build-and-test.md`, section "Dependent tests") don't apply.
-- Upstream libraries: `ishtech-base-jpa`, `ishtech-springboot-jwtauth` and `ishtech-validations-java`, and their own upstream libraries (`rules/repositories.md`). Their versions are declared in `build.gradle.kts`; these are the upstream SNAPSHOTs that the test Level 3 precondition refers to.
+- Upstream libraries: `ishtech-springboot-base-jpa`, `ishtech-springboot-jwtauth` and `ishtech-validations-java`, and their own upstream libraries (`rules/repositories.md`). Their versions are declared in `build.gradle.kts`; these are the upstream SNAPSHOTs that the test Level 3 precondition refers to.
 
 ## Read the doc before doing the thing
 The docs are the source of truth. Don't guess commands: open the matching file and section first, and follow its links.
