@@ -20,7 +20,7 @@ Which application version (Docker image tag) to use for your JDK version: [JDK-V
 
 
 ## Design
-- [ishtech-base-jpa](https://github.com/ishtech/ishtech-base-jpa) - Foundational JPA and other base classes
+- [ishtech-springboot-base-jpa](https://github.com/ishtech/ishtech-springboot-base-jpa) - Foundational JPA and other base classes
 - [ishtech-springboot-jwtauth](https://github.com/ishtech/ishtech-springboot-jwtauth) - For Authentication & Authorization
 
 ### Some design considerations

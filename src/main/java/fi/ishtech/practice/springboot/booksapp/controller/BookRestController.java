@@ -126,10 +126,10 @@ public class BookRestController {
 	})
 	// @formatter:on
 	@PutMapping("/{id}")
-	public ResponseEntity<BookDto> updateById(@PathVariable Long id, @RequestBody BookDto bookDto) {
+	public ResponseEntity<BookDto> updateById(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
 		log.trace("Updating Book({})", id);
 
-		Assert.isTrue(bookDto.getId() == null || id == bookDto.getId(), "Input id param not matching with id in DTO");
+		Assert.isTrue(bookDto.getId() == null || id.equals(bookDto.getId()), "Input id param not matching with id in DTO");
 
 		var output = bookService.updateByIdAndMapToDto(id, bookDto);
 		log.debug("Updated Book({})", id);
