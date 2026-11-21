@@ -79,7 +79,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookDto updateByIdAndMapToDto(Long id, BookDto bookDto) {
-		Assert.isTrue(bookDto.getId() == null || id == bookDto.getId(), "Input id param not matching with id in DTO");
+		Assert.isTrue(bookDto.getId() == null || id.equals(bookDto.getId()), "Input id param not matching with id in DTO");
 
 		Book book = findOneByIdOrElseThrow(id);
 

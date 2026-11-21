@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import fi.ishtech.base.service.BaseStandardService;
+import fi.ishtech.springboot.base.service.BaseStandardService;
 import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import fi.ishtech.practice.springboot.booksapp.entity.Book;
 import fi.ishtech.practice.springboot.booksapp.spec.BookSpec;

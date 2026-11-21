@@ -2,8 +2,6 @@ package fi.ishtech.practice.springboot.booksapp.controller;
 
 import java.util.NoSuchElementException;
 
-import jakarta.validation.ConstraintViolationException;
-
 import org.apache.commons.lang3.Strings;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -25,24 +23,30 @@ public class CustomExceptionHandler {
 	public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
 		log.error("handle DataIntegrityViolationException", ex);
 
-		if (Strings.CI.contains(ex.getMessage(), "Unique index or primary key violation")
-				&& Strings.CI.contains(ex.getMessage(), "uk_book_title_author")) {
+		if (Strings.CI.contains(getConstraintName(ex), "uk_book_title_author")) {
 			return ResponseEntity.badRequest().body("Book title and author combination already exists");
 		}
 
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		// don't leak SQL, schema or constraint details to the client, they are in the log
+		return new ResponseEntity<>("Data integrity violation", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	/**
+	 * Gets the name of the violated constraint, as Hibernate extracts it for the database dialect in use.
+	 *
+	 * @return constraint name, or {@code null} if the cause is not a Hibernate constraint violation
+	 */
+	private String getConstraintName(DataIntegrityViolationException ex) {
+		if (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException cve) {
+			return cve.getConstraintName();
+		}
+
+		return null;
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
 		log.error("handle IllegalArgumentException", ex);
-
-		return ResponseEntity.badRequest().body(ex.getMessage());
-	}
-
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
-		log.error("handle ConstraintViolationException", ex);
 
 		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
