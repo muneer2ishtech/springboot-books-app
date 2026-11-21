@@ -23,7 +23,7 @@
 | Book   | Get Book by ID    | GET    | /api/v1/books/{id} | Retrieves a book by its ID |
 | Book   | Search/List Books | GET    | /api/v1/books      | Retrieves paginated list of books with filters |
 | Book   | Update Book       | PUT    | /api/v1/books/{id} | Updates an existing book by ID |
-| Book   | Delete Book       | DELETE | /api/v1/books/{id} | Deletes a book (returns 410 Gone) |
+| Book   | Delete Book       | DELETE | /api/v1/books/{id} | Deletes a book (returns 410 Gone, also if the book does not exist, as delete is idempotent) |
 | Book   | Create Book (with PreparedStmt)    | POST   | /api/v1/books/with-prep-stmt    | <ul><li>Uses SQL prepared statement (DAO layer).</li><li>Input is parameterized and treated as data.</li><li>Safe against SQL Injection.</li></ul> |
 | Book   | Create Book (without PreparedStmt) | POST   | /api/v1/books/without-prep-stmt | <ul><li>Does not use prepared statements; uses string concatenation in SQL.</li><li>Input is directly embedded into query.</li><li>Vulnerable to SQL Injection (Unsafe).</li></ul> |
 

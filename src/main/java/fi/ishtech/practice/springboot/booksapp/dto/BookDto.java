@@ -3,8 +3,8 @@ package fi.ishtech.practice.springboot.booksapp.dto;
 import java.io.Serial;
 import java.math.BigDecimal;
 
-import fi.ishtech.base.vo.BaseStandardEntityVo;
-import fi.ishtech.common.validation.MaxCurrentYear;
+import fi.ishtech.springboot.base.vo.BaseStandardEntityVo;
+import fi.ishtech.common.validation.constraints.MaxCurrentYear;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

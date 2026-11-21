@@ -1,22 +1,23 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.0.7"
+	id("org.springframework.boot") version "4.0.10"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "0.6.0"
+version = "1.0.0"
 description = "Books managing application using Spring Boot"
 
 base.archivesName.set("ishtech-springboot-books-app")
 
 // Centralized version declarations
-val ishtechBaseJpaVersion = "5.2.0"
-val ishtechSpringbootJwtauthVersion = "3.2.1"
+val ishtechSpringbootBaseJpaVersion = "6.0.0"
+val ishtechSpringbootJwtauthVersion = "4.0.0"
+val ishtechValidationsVersion = "1.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
 val springdocVersion = "3.0.3"
-val hibernateVersion = "7.2.19.Final"
+val hibernateVersion = "7.2.25.Final"
 
 java {
 	toolchain {
@@ -43,8 +44,9 @@ repositories {
 }
 
 dependencies {
-	implementation("fi.ishtech.base:ishtech-base-jpa:${ishtechBaseJpaVersion}")
+	implementation("fi.ishtech.springboot:ishtech-springboot-base-jpa:${ishtechSpringbootBaseJpaVersion}")
 	implementation("fi.ishtech.springboot:ishtech-springboot-jwtauth-api:${ishtechSpringbootJwtauthVersion}")
+	implementation("fi.ishtech.common:ishtech-validations:${ishtechValidationsVersion}")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -59,7 +61,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-database-postgresql")
 
 	implementation("org.hibernate.orm:hibernate-envers")
-	annotationProcessor("org.hibernate:hibernate-jpamodelgen:${hibernateVersion}")
+	annotationProcessor("org.hibernate.orm:hibernate-processor:${hibernateVersion}")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

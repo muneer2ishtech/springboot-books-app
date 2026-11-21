@@ -19,10 +19,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		"fi.ishtech.practice.springboot.booksapp.repository"
 })
 // @formatter:on
-public class BookApplication {
+public class BooksApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BookApplication.class, args);
+		SpringApplication.run(BooksApplication.class, args);
 	}
 
 }

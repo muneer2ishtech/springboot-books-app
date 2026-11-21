@@ -77,16 +77,30 @@ docker run \
     - You can prefix with env vars as in below example
     - Below args are optional, you can change to desired value or skip, if skipped they will use default value
         - `SPRING_PROFILES_ACTIVE` — Spring profile to activate, if skipped defaults to `dev`
-        - `DB_PORT` — port DB is exposed on the **host machine**, if skipped defaults to `5432`
+        - `DB_PORT_LOCAL` — port DB is exposed on the **host machine**, if skipped falls back to `DB_PORT`, and if that is also skipped defaults to `5432`
         - `SERVER_PORT_REMOTE` — port Spring Boot runs on **inside the container**, if skipped defaults to `8080`
         - `SERVER_PORT_LOCAL` — port the app is exposed on the **host machine**, if skipped defaults to `SERVER_PORT_REMOTE`
+        - `APP_VERSION` — tag of the built image, as `muneer2ishtech/ishtech-springboot-books-app:$APP_VERSION`, if skipped the image is tagged `muneer2ishtech/ishtech-springboot-books-app:latest`
+    - Suggested: append `-local` to `APP_VERSION` when building locally, so a locally built image is not confused with, and does not overwrite, the same tag pulled from Docker Hub
 
 ```
 SPRING_PROFILES_ACTIVE=dev \
 SERVER_PORT_REMOTE=8080 \
 SERVER_PORT_LOCAL=8181 \
-DB_PORT=25432 \
+DB_PORT_LOCAL=25432 \
 APP_VERSION=$(./gradlew -q printVersion 2>/dev/null) \
+docker compose up --build
+
+```
+
+- Same, tagging the locally built image with a `-local` suffix
+
+```
+SPRING_PROFILES_ACTIVE=dev \
+SERVER_PORT_REMOTE=8080 \
+SERVER_PORT_LOCAL=8181 \
+DB_PORT_LOCAL=25432 \
+APP_VERSION=$(./gradlew -q printVersion 2>/dev/null)-local \
 docker compose up --build
 
 ```

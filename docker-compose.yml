@@ -29,7 +29,7 @@ services:
       POSTGRES_USER: ishtech_dev_user
       POSTGRES_PASSWORD: ishtech_dev_pass
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${DB_PORT_LOCAL:-${DB_PORT:-5432}}:5432"
     volumes:
       - ishtech_springboot_books_postgres_data:/var/lib/postgresql/18/data
       - ./src/test/resources/db/postgres/init_db.sql:/docker-entrypoint-initdb.d/booksapp_dev_init_db.sql
