@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.1.2"
+	id("org.springframework.boot") version "4.1.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -16,8 +16,8 @@ val ishtechSpringbootJwtauthVersion = "4.0.0"
 val ishtechValidationsVersion = "1.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
-val springdocVersion = "3.2.0"
-val hibernateVersion = "7.4.13.Final"
+val springdocVersion = "3.2.1"
+val hibernateVersion = "7.4.15.Final"
 
 java {
 	toolchain {
