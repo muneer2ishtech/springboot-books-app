@@ -5,14 +5,14 @@ plugins {
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "0.7.0-springboot-4-1-SNAPSHOT"
+version = "1.1.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 base.archivesName.set("ishtech-springboot-books-app")
 
 // Centralized version declarations
-val ishtechBaseJpaVersion = "5.3.0-springboot-4-1-SNAPSHOT"
-val ishtechSpringbootJwtauthVersion = "3.3.0-springboot-4-1-SNAPSHOT"
+val ishtechSpringbootBaseJpaVersion = "6.0.0"
+val ishtechSpringbootJwtauthVersion = "4.0.0"
 val ishtechValidationsVersion = "1.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-	implementation("fi.ishtech.base:ishtech-base-jpa:${ishtechBaseJpaVersion}")
+	implementation("fi.ishtech.springboot:ishtech-springboot-base-jpa:${ishtechSpringbootBaseJpaVersion}")
 	implementation("fi.ishtech.springboot:ishtech-springboot-jwtauth-api:${ishtechSpringbootJwtauthVersion}")
 	implementation("fi.ishtech.common:ishtech-validations:${ishtechValidationsVersion}")
 
