@@ -14,7 +14,8 @@ When each level runs:
 
 ### Level 1: build with tests
 - Run the build-with-tests command from the repo's README.
-- On any branch other than `dev`, run that command with `verify` instead of `install`, unless the task uses a temporary local repository ("Cross-repo builds"), so that `~/.m2` keeps only builds of `dev`.
+- Maven: on any branch other than `dev`, run that command with `verify` instead of `install`, unless the task uses a temporary local repository ("Cross-repo builds"), so that `~/.m2` keeps only builds of `dev`.
+- Gradle: `./gradlew clean build` doesn't install anything into `~/.m2`, so run it as the README gives it, on any branch.
 - Passes when the build succeeds with no compile errors and no test failures or errors. Report the test counts.
 
 ### Level 2: run the app with Maven/Gradle
@@ -26,7 +27,7 @@ Start the app the way the repo's docs describe (command, profile, database), on 
 Afterwards, stop the app and make sure the forked JVM has exited too; stopping Maven alone can leave it listening on the port.
 
 ### Level 3: build and run with Docker
-Precondition: the Docker build resolves the repo's upstream SNAPSHOT dependencies (for example `ishtech-base-jpa` and `ishtech-i18n`) from the Sonatype snapshot repository, not from the local Maven repository. The repo's own code is copied into the image, so its own SNAPSHOT doesn't need to be published. Level 3 therefore tests the latest upstream code only when the published upstream SNAPSHOTs contain it. If they don't yet, Level 3 can still run, but its result may not be reliable; say so in the report. How to publish them first: `versions-and-releases.md`, section "Publishing upstream SNAPSHOTs before Level 3".
+Precondition: the Docker build resolves the repo's upstream SNAPSHOT dependencies (for example `ishtech-springboot-base-jpa` and `ishtech-i18n`) from the Sonatype snapshot repository, not from the local Maven repository. The repo's own code is copied into the image, so its own SNAPSHOT doesn't need to be published. Level 3 therefore tests the latest upstream code only when the published upstream SNAPSHOTs contain it. If they don't yet, Level 3 can still run, but its result may not be reliable; say so in the report. How to publish them first: `versions-and-releases.md`, section "Publishing upstream SNAPSHOTs before Level 3".
 
 Build and start the app with docker compose as the repo's Docker doc describes. Use host ports that are free and don't clash with other running apps (the doc lists the port variables). Use the compose file's own database service when it defines one, not a local database. Then check, in order:
 1. Start-up: the app container is running, and its log (`docker logs <container>`) shows the application's "Started ..." line with no startup errors.
@@ -43,18 +44,20 @@ Afterwards, tear the stack down with `docker compose down -v`.
 ## Dependent tests
 A dependent is a repo that declares this repo's artifact as a dependency in its build file (`pom.xml` or `build.gradle.kts`). Dependent tests are for repos that other repos depend on. They are separate from the test levels.
 
+Testing a dependent doesn't make it part of the current task or release: it's in scope only when the owner names it explicitly. A dependent that isn't in scope is only built and tested locally, as this section describes; don't change, commit, push, merge or release it.
+
 Purpose: to confirm that a change in this repo does not break its dependents and has the intended effect in them. This matters most before a release, so dependent tests are required for the `dev` to `main` readiness check (`versions-and-releases.md`).
 
 They run:
-- when the owner asks (for example: "test these `ishtech-base-jpa` changes in `ishtech-springboot-jwtauth`, so I'm sure they don't break anything and do what's intended"), and
+- when the owner asks (for example: "test these `ishtech-springboot-base-jpa` changes in `ishtech-springboot-jwtauth`, so I'm sure they don't break anything and do what's intended"), and
 - always, as part of the readiness check.
 
-If the owner doesn't name a dependent, use the default dependent listed in the repo's `.claude/CLAUDE.md`.
+If the owner doesn't name a dependent, use the default dependent listed in the repo's `.claude/CLAUDE.md`. If it lists none, ask the owner which dependent to use; in the readiness check, report the dependent tests as not done for that reason unless the owner names one.
 
 Steps:
 1. Choose where the dependent gets the changed library from. If the owner hasn't said, ask:
    - Local build: build the changed library in this task as section "Cross-repo builds" describes for an upstream repo changed in the task, so the dependent resolves that build.
-   - Published SNAPSHOT: the version in the Maven Central snapshot repository. Use it only if you can confirm it was published from the branch being tested, after that branch's latest commit (compare the timestamp in the snapshot repository's `maven-metadata.xml` with that commit's time). If you can't confirm both, say so and ask the owner. To stop a Maven dependent from resolving a local build instead, build it with an empty temporary local repository (`-Dmaven.repo.local=<temporary directory>`).
+   - Published SNAPSHOT: the version in the Sonatype snapshot repository. Use it only if you can confirm it was published from the branch being tested, after that branch's latest commit (compare the timestamp in the Sonatype snapshot repository's `maven-metadata.xml` with that commit's time). If you can't confirm both, say so and ask the owner. To stop a Maven dependent from resolving a local build instead, build it with an empty temporary local repository (`-Dmaven.repo.local=<temporary directory>`).
 2. Check that the dependent declares the library version being tested. If it doesn't, ask the owner before changing the dependent's build file.
 3. Confirm which library artifact the dependent actually resolved (Maven: `./mvnw dependency:list`; Gradle: `./gradlew dependencies`).
 4. In the dependent, run the test levels the owner asks for; for the readiness check, run all of the dependent's test levels. Follow the dependent's own `.claude/CLAUDE.md` and docs.
@@ -63,8 +66,8 @@ Steps:
 ## Cross-repo builds
 An upstream repo is one of the owner's repos whose artifact a repo being built declares as a SNAPSHOT dependency, directly or through another upstream repo. A dependency on a released version is fixed and needs none of the steps in this section.
 
-- Build order: decide it from the declared versions in the build files. Build each upstream repo before the repos that depend on it.
-- A repo's `.claude/CLAUDE.md` lists its known dependents and its default dependent for dependent tests. The list isn't exhaustive, because a published library can be used by anyone. To find which of the owner's own repos depend on a repo, search their build files (`pom.xml`, `build.gradle.kts`); repo locations are in `owner-workflow.md`. If those repos aren't available (e.g. in a cloud or mobile session), say in your report which dependents weren't checked or tested.
+- Build order: decide it from the declared versions in the build files (overview: `repositories.md`, section "Order of work across repos"). Build each upstream repo before the repos that depend on it. Repos with no dependency path between them can be built in parallel.
+- A library's `.claude/CLAUDE.md` lists only the owner's other libraries that depend on it, and its default dependent for dependent tests, if it has one. Applications that use a library aren't listed, because a published library can be used by anyone (`repositories.md`). To find which of the owner's repos use a library, search their build files (`pom.xml`, `build.gradle.kts`). If those repos aren't available (e.g. in a cloud or mobile session), say in your report which dependents weren't checked or tested.
 
 ### Which build of an upstream repo to use
 The local Maven repository `~/.m2` holds only builds of each repo's latest `dev`. Every other build goes into a temporary local repository (see "Temporary local repository" below), so it never replaces them.
@@ -89,7 +92,8 @@ A clean checkout is a working tree at the branch's latest commit with no uncommi
 - Use one only when the table above requires it. Create one new directory per task, outside every repo (for example in the session's scratchpad).
 - When a task changes more than one repo, tell the owner at the start, together with the branch-name approval, that builds will install into a temporary local repository, and get their confirmation. If the owner declines, install into `~/.m2` instead, and say in the report that the `dev` builds there were replaced.
 - Add these options to every Maven command of the task, including builds, runs, `dependency:list` and `help:*`: `-Dmaven.repo.local=<temp> -Dmaven.repo.local.tail=<home>/.m2/repository`. `<temp>` is the directory's absolute path; `<home>` is the absolute path of the user's home directory, because Maven doesn't expand `~`. Maven then installs only into `<temp>`, and reads everything else from `~/.m2` without changing it. This needs Maven 3.9 or later (check with `./mvnw -v`).
-- Delete the directory after the task's last Maven command, and say so in the report.
+- Gradle (`springboot-books-app`): its `mavenLocal()` repository reads the temporary repository when `-Dmaven.repo.local=<temp>` is passed to `./gradlew`. Gradle has no equivalent of `maven.repo.local.tail`, so every SNAPSHOT of the owner's libraries that it doesn't find there resolves from the Sonatype snapshot repository instead of `~/.m2`. Therefore install every upstream SNAPSHOT the Gradle build needs into the temporary repository, and confirm with `./gradlew dependencyInsight --dependency <artifactId> -Dmaven.repo.local=<temp>`.
+- Delete the directory after the task's last Maven or Gradle command, and say so in the report.
 
 Level 3 isn't affected: the Docker build resolves upstream SNAPSHOTs from the Sonatype snapshot repository, not from a local repository.
 
@@ -97,4 +101,4 @@ Level 3 isn't affected: the Docker build resolves upstream SNAPSHOTs from the So
 1. Build every upstream repo that the table says to build, and every repo changed in this task, in the build order.
 2. For each repo, run its Level 1 command. Use `install` instead of `verify` or `test` for every repo that another repo in the task depends on.
 3. If a repo fails, don't build the repos that depend on it; report them as not run.
-4. For each repo that has upstream repos, confirm that every upstream artifact resolved from the location the table gives: run `./mvnw dependency:list -DoutputAbsoluteArtifactFilename=true` with the same options as the build. If any resolved from somewhere else (for example the remote snapshot repository), stop and report it.
+4. For each repo that has upstream repos, confirm that every upstream artifact resolved from the location the table gives: run `./mvnw dependency:list -DoutputAbsoluteArtifactFilename=true` (Gradle: `./gradlew dependencyInsight --dependency <artifactId>`) with the same options as the build. If any resolved from somewhere else (for example the remote snapshot repository), stop and report it.

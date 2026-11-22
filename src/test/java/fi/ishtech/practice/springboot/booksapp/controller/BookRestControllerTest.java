@@ -1,23 +1,27 @@
 package fi.ishtech.practice.springboot.booksapp.controller;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
-
-import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -39,6 +43,7 @@ import fi.ishtech.practice.springboot.booksapp.BooksApplication;
 import fi.ishtech.practice.springboot.booksapp.dao.BookDao;
 import fi.ishtech.practice.springboot.booksapp.dto.BookDto;
 import fi.ishtech.practice.springboot.booksapp.entity.Book;
+import fi.ishtech.practice.springboot.booksapp.repository.BookRepository;
 import fi.ishtech.practice.springboot.booksapp.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,6 +65,9 @@ public class BookRestControllerTest {
 
 	@MockitoBean
 	private BookDao bookDao;
+
+	@Autowired
+	private BookRepository bookRepository;
 
 	@Test
 	@Order(1)
@@ -176,8 +184,8 @@ public class BookRestControllerTest {
 		book.setYear(Short.valueOf("2023"));
 		book.setPrice(new BigDecimal("12.34"));
 
-		when(bookService.createAndMapToDto(any(BookDto.class))).thenThrow(
-				new DataIntegrityViolationException("Unique index or primary key violation: uk_book_title_author"));
+		when(bookService.createAndMapToDto(any(BookDto.class)))
+				.thenThrow(newPostgresDataIntegrityViolationException("uk_book_title_author"));
 
 		Gson gson = new Gson();
 		String requestJson = gson.toJson(book);
@@ -186,8 +194,71 @@ public class BookRestControllerTest {
  		mvc.perform(post("/api/v1/books")
  				.contentType(MediaType.APPLICATION_JSON)
  				.content(requestJson))
- 			.andExpect(status().isBadRequest());
+ 			.andExpect(status().isBadRequest())
+ 			.andExpect(content().string("Book title and author combination already exists"));
 		// @formatter:on
+	}
+
+	@Test
+	@Order(6)
+	@WithMockUser(username = "junit@ishtech.fi", password = "Test#123", authorities = "ROLE_USER")
+	public void testCreateNewBookFailForNonUniqueTitleInDb() throws Exception {
+		Book book = new Book();
+		book.setTitle("Intro to Java");
+		book.setAuthor("Muneer");
+		book.setYear(Short.valueOf("2023"));
+		book.setPrice(new BigDecimal("12.34"));
+
+		Book duplicateBook = new Book();
+		duplicateBook.setTitle(book.getTitle());
+		duplicateBook.setAuthor(book.getAuthor());
+		duplicateBook.setYear(book.getYear());
+		duplicateBook.setPrice(book.getPrice());
+
+		// the exception the JUnit DB really raises for the unique constraint, instead of a hand-built one
+		DataIntegrityViolationException ex;
+		try {
+			bookRepository.save(book);
+			ex = assertThrows(DataIntegrityViolationException.class, () -> bookRepository.save(duplicateBook));
+		} finally {
+			bookRepository.deleteAll();
+		}
+
+		when(bookService.createAndMapToDto(any(BookDto.class))).thenThrow(ex);
+
+		BookDto bookDto = new BookDto();
+		bookDto.setTitle(book.getTitle());
+		bookDto.setAuthor(book.getAuthor());
+		bookDto.setYear(book.getYear());
+		bookDto.setPrice(book.getPrice());
+
+		Gson gson = new Gson();
+		String requestJson = gson.toJson(bookDto);
+
+		// @formatter:off
+ 		mvc.perform(post("/api/v1/books")
+ 				.contentType(MediaType.APPLICATION_JSON)
+ 				.content(requestJson))
+ 			.andExpect(status().isBadRequest())
+ 			.andExpect(content().string("Book title and author combination already exists"))
+ 			.andExpect(content().string(not(containsStringIgnoringCase("insert into"))))
+ 			.andExpect(content().string(not(containsStringIgnoringCase("t_book"))));
+		// @formatter:on
+	}
+
+	/**
+	 * Builds the exception as Spring translates Hibernate's exception for a PostgreSQL unique constraint violation.
+	 */
+	private DataIntegrityViolationException newPostgresDataIntegrityViolationException(String constraintName) {
+		String sql = "insert into booksapp_dev_schema.t_book (author,description,is_active,price,title,year) values (?,?,?,?,?,?)";
+		String pgMessage = "ERROR: duplicate key value violates unique constraint \"" + constraintName + "\"\n"
+				+ "  Detail: Key (title, author)=(Intro to Java, Muneer) already exists.";
+		String message = "could not execute statement [" + pgMessage + "] [" + sql + "]; SQL [" + sql + "]; constraint ["
+				+ constraintName + "]";
+
+		return new DataIntegrityViolationException(message, new org.hibernate.exception.ConstraintViolationException(
+				"could not execute statement [" + pgMessage + "] [" + sql + "]", new SQLException(pgMessage, "23505"),
+				sql, constraintName));
 	}
 
 	@Test
@@ -267,9 +338,6 @@ public class BookRestControllerTest {
 		book.setYear(Short.valueOf("2999"));
 		book.setPrice(new BigDecimal("56.78"));
 
-		when(bookService.updateByIdAndMapToDto(eq(1L), any(BookDto.class))).thenThrow(new ConstraintViolationException(
-				"updateByIdAndMapToDto.book.year: must not be greater than the current year", Set.of()));
-
 		Gson gson = new Gson();
 		String requestJson = gson.toJson(book);
 
@@ -279,6 +347,8 @@ public class BookRestControllerTest {
 				.content(requestJson))
 			.andExpect(status().isBadRequest());
 		// @formatter:on
+
+		verify(bookService, never()).updateByIdAndMapToDto(any(), any());
 	}
 
 	@Test
