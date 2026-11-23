@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "2.0.0"
+version = "3.0.0-SNAPSHOT"
 description = "Books managing application using Spring Boot"
 
 base.archivesName.set("ishtech-springboot-books-app")
