@@ -1,23 +1,23 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.0.10"
+	id("org.springframework.boot") version "4.1.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "fi.ishtech.practice.springboot"
-version = "1.0.0"
+version = "2.0.0"
 description = "Books managing application using Spring Boot"
 
 base.archivesName.set("ishtech-springboot-books-app")
 
 // Centralized version declarations
-val ishtechSpringbootBaseJpaVersion = "6.0.0"
-val ishtechSpringbootJwtauthVersion = "4.0.0"
+val ishtechSpringbootBaseJpaVersion = "7.0.0"
+val ishtechSpringbootJwtauthVersion = "5.0.0"
 val ishtechValidationsVersion = "1.0.0"
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.13.0"
-val springdocVersion = "3.0.3"
-val hibernateVersion = "7.2.25.Final"
+val springdocVersion = "3.2.1"
+val hibernateVersion = "7.4.15.Final"
 
 java {
 	toolchain {
